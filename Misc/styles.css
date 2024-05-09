@@ -165,16 +165,15 @@ input[type="file"] {
     flex-wrap: wrap;
     justify-content: center;
     overflow-y: auto; /* Enable vertical scrolling */
-    max-height: calc(100vh - 150px); /* Subtract height of pagination div */
 }
 
 #pagination {
-    position: absolute;
-    bottom: 0;
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-top: 20px; /* Adjust margin as needed */
 }
+
 
 
 .image-box {
