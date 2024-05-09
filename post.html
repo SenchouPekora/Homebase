@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Homebase</title>
+    <link rel="stylesheet" type="text/css" href="Misc/styles.css">
+    <style>
+        #postBody {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        #displayName, #postText, #timePosted {
+            text-align: center;
+        }
+        #timePosted {
+            color: gray;
+        }
+        #postImage {
+            width: 200px;
+            height: auto;
+            object-fit: cover;
+        }
+        #commentForm {
+            display: flex;
+            justify-content: space-between;
+            width: 500px;
+        }
+        #comments {
+            width: 500px;
+        }
+        .comment {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .timestamp {
+            display: block;
+        }
+        .commentDisplayName {
+            font-weight: bold;
+        }
+        .commentText {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="postBody">
+        <h1 id="displayName"></h1>
+        <p id="postText"></p>
+        <p id="timePosted"></p>
+        <img id="postImage" src="">
+        <p>Click image to view full-size</p>
+    </div>
+    <div id="commentSection">
+        <form id="commentForm">
+            <input type="text" id="commentDisplayName" placeholder="Display Name">
+            <textarea id="commentText" placeholder="Comment"></textarea>
+            <button type="submit">Post Comment</button>
+        </form>
+        <div id="comments">
+            <!-- Comments will be appended here -->
+        </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDKE6vm_FNpQKZoAzhV0iFYhtBgIQMhPfI",
+            authDomain: "homebase-5a001.firebaseapp.com",
+            projectId: "homebase-5a001",
+            storageBucket: "homebase-5a001.appspot.com",
+            messagingSenderId: "956333988657",
+            appId: "1:956333988657:web:8c431e1b48b07776e7fcf5",
+            measurementId: "G-PQ9FB5G7KT"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+
+        db.collection('posts').doc(postId).get().then(doc => {
+            const post = doc.data();
+            document.getElementById('displayName').textContent = post.displayName;
+            document.getElementById('postText').textContent = post.text;
+            document.getElementById('postImage').src = post.imageUrl;
+        });
+
+        db.collection('posts').doc(postId).collection('comments').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+            document.getElementById('comments').innerHTML = '';
+            snapshot.forEach(doc => {
+                const comment = doc.data();
+                const commentElement = document.createElement('div');
+                commentElement.classList.add('comment');
+                commentElement.innerHTML = `
+                    <span class="timestamp">${new Date(comment.timestamp.seconds * 1000).toLocaleString()}</span>
+                    <h2>${comment.displayName}</h2>
+                    <p>${comment.text}</p>`;
+                document.getElementById('comments').appendChild(commentElement);
+            });
+        });
+
+        document.getElementById('commentForm').addEventListener('submit', event => {
+            event.preventDefault();
+            const displayName = document.getElementById('commentDisplayName').value;
+            const text = document.getElementById('commentText').value;
+            db.collection('posts').doc(postId).collection('comments').add({
+                displayName: displayName,
+                text: text,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            document.getElementById('commentDisplayName').value = '';
+            document.getElementById('commentText').value = '';
+        });
+
+        document.getElementById('postImage').addEventListener('click', event => {
+            window.open(event.target.src);
+        });
+    </script>
+</body>
+</html>
