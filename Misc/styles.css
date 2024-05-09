@@ -88,6 +88,28 @@ button {
     margin: 10px;
     flex: 1 0 12%;
 }
+
+/* For screens smaller than 600px wide */
+@media screen and (max-width: 600px) {
+    .image-box {
+        width: 100%; /* or any other property you want to change */
+    }
+}
+
+/* For screens between 600px and 1200px wide */
+@media screen and (min-width: 600px) and (max-width: 1200px) {
+    .image-box {
+        width: 50%; /* or any other property you want to change */
+    }
+}
+
+/* For screens larger than 1200px wide */
+@media screen and (min-width: 1200px) {
+    .image-box {
+        width: 25%; /* or any other property you want to change */
+    }
+}
+
 .image-box img {
     width: 150px;
     height: auto;
