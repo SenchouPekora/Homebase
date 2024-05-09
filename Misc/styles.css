@@ -68,7 +68,10 @@ button {
     width: 100%;
     display: flex;
     justify-content: center;
+    z-index: 1; /* Ensure pagination is above other content */
+    background-color: rgba(0, 0, 0, 0.7); /* Add background color for better visibility */
 }
+
 .page-number {
     margin: 0 10px;
     cursor: pointer;
@@ -180,16 +183,4 @@ input[type="file"] {
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
-}
-
-#image-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.image-box {
-    flex: 1 0 auto;
-    max-width: 150px;
-    margin: 10px;
 }
