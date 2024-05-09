@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" href="drivebooru.ico" type="image/x-icon">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Drivebooru | Favorites</title>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="Misc/styles.css">
+    </head>
+<body>
+    <h1>Favorites</h1>
+    <div id="image-container"></div>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAOToWZ1WRUjdZ2AImLWRAENdKnvKmEq8A",
+            authDomain: "drivebooru.firebaseapp.com",
+            projectId: "drivebooru",
+            storageBucket: "drivebooru.appspot.com",
+            messagingSenderId: "190448262448",
+            appId: "1:190448262448:web:8c431e1b48b07776e7fcf5",
+            measurementId: "G-PQ9FB5G7KT"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        var db = firebase.firestore();
+        db.collection('users').doc(user.uid).collection('favorites').get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                const img = document.createElement('img');
+                img.src = `https://drive.google.com/thumbnail?id=${doc.id}&sz=w150`;
+                img.classList.add('image-box');
+
+                const a = document.createElement('a');
+                a.href = `viewer.html?id=${doc.id}`;
+
+                a.appendChild(img);
+
+                document.getElementById('image-container').appendChild(a);
+            });
+        });
+    } else {
+        console.log('User not signed in');
+    }
+});
+    </script>
+</body>
+</html>
