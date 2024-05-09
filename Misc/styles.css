@@ -62,13 +62,7 @@ button {
     text-align: center;
     border: none;
 }
-#pagination {
-    position: absolute; /* Change from fixed to absolute */
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
+
 .page-number {
     margin: 0 10px;
     cursor: pointer;
@@ -166,13 +160,22 @@ input[type="file"] {
 }
 
 #image-container {
-    position: relative; /* Add this line */
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     overflow-y: auto; /* Enable vertical scrolling */
-    max-height: calc(100vh - 100px); /* Adjust max-height as needed */
+    max-height: calc(100vh - 150px); /* Subtract height of pagination div */
 }
+
+#pagination {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 
 .image-box {
     background-color: #092e9a;
