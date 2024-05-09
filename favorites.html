@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Drivebooru | Favorites</title>
+        <title>Homebase</title>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="Misc/styles.css">
     </head>
@@ -25,26 +25,44 @@
         firebase.initializeApp(firebaseConfig);
 
         firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        var db = firebase.firestore();
-        db.collection('users').doc(user.uid).collection('favorites').get().then(function(querySnapshot) {
-            querySnapshot.forEach(function(doc) {
-                const img = document.createElement('img');
-                img.src = `https://drive.google.com/thumbnail?id=${doc.id}&sz=w150`;
-                img.classList.add('image-box');
+        if (user) {
+            var db = firebase.firestore();
+            db.collection('users').doc(user.uid).collection('favorites').get().then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
+                    // Fetch the post data from the 'posts' collection using the doc.id
+                    db.collection('posts').doc(doc.id).get().then(function(postDoc) {
+                        if (postDoc.exists) {
+                            const post = postDoc.data();
+                            const img = document.createElement('img');
+                            img.src = post.imageUrl;
+                            img.classList.add('image-box');
 
-                const a = document.createElement('a');
-                a.href = `viewer.html?id=${doc.id}`;
+                            const a = document.createElement('a');
+                            a.href = `viewer.html?id=${doc.id}`;
 
-                a.appendChild(img);
+                            const h2 = document.createElement('h2');
+                            h2.textContent = post.displayName;
 
-                document.getElementById('image-container').appendChild(a);
+                            const p = document.createElement('p');
+                            p.textContent = post.text;
+
+                            a.appendChild(img);
+                            a.appendChild(h2);
+                            a.appendChild(p);
+
+                            document.getElementById('image-container').appendChild(a);
+                        } else {
+                            console.log("No such document!");
+                        }
+                    }).catch(function(error) {
+                        console.log("Error getting document:", error);
+                    });
+                });
             });
-        });
-    } else {
-        console.log('User not signed in');
-    }
-});
+        } else {
+            console.log('User not signed in');
+        }
+    });
     </script>
 </body>
 </html>

@@ -1,6 +1,50 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <style>
+            #postBody {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+            }
+            #displayName, #postText, #timePosted {
+                text-align: center;
+            }
+            #timePosted {
+                color: gray;
+            }
+            #postImage {
+                width: 200px;
+                height: auto;
+                object-fit: cover;
+            }
+            #commentForm {
+                display: flex;
+                justify-content: space-between;
+                width: 500px;
+            }
+            #comments {
+                width: 500px;
+            }
+            .comment {
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 10px;
+                margin-bottom: 10px;
+                position: relative;
+            }
+            .timestamp {
+                display: block;
+            }
+            .commentDisplayName {
+                font-weight: bold;
+            }
+            .commentText {
+                margin-left: 20px;
+            }
+        </style>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Homebase</title>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
@@ -30,6 +74,42 @@
                 measurementId: "G-PQ9FB5G7KT"
         };
         firebase.initializeApp(firebaseConfig);
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+
+        db.collection('posts').doc(postId).collection('comments').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+            document.getElementById('comments').innerHTML = '';
+            snapshot.forEach(doc => {
+                const comment = doc.data();
+                const commentElement = document.createElement('div');
+                commentElement.classList.add('comment');
+                commentElement.innerHTML = `
+                    <span class="timestamp">${new Date(comment.timestamp.seconds * 1000).toLocaleString()}</span>
+                    <h2>${comment.displayName}</h2>
+                    <p>${comment.text}</p>`;
+                document.getElementById('comments').appendChild(commentElement);
+            });
+        });
+
+        document.getElementById('commentForm').addEventListener('submit', event => {
+            event.preventDefault();
+            const displayName = document.getElementById('commentDisplayName').value;
+            const text = document.getElementById('commentText').value;
+            db.collection('posts').doc(postId).collection('comments').add({
+                displayName: displayName,
+                text: text,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            document.getElementById('commentDisplayName').value = '';
+            document.getElementById('commentText').value = '';
+        });
+
+        document.getElementById('postImage').addEventListener('click', event => {
+            window.open(event.target.src);
+        });
 
         var params = new URLSearchParams(window.location.search);
         var id = params.get('id');
@@ -117,6 +197,6 @@ window.addEventListener('load', function() {
             displayPagination();
         });
 });
-    </script>
+</script>
 </body>
 </html>
