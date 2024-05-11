@@ -145,12 +145,12 @@ input[type="file"] {
 
 #postOverlay .close:hover,
 #postOverlay .close:focus {
-    color: #000;
+    color: #ff0000;
     text-decoration: none;
     cursor: pointer;
 }
 .post {
-    border: 1px solid #000;
+    border: 5px solid #092e9a;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
@@ -161,24 +161,22 @@ input[type="file"] {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-y: auto;
 }
 
 #pagination {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 20px; /* Adjust margin as needed */
+    margin-top: 20px;
 }
-
-
 
 .image-box {
     background-color: #092e9a;
     padding: 20px;
     border-radius: 10px;
     margin: 10px;
-    flex: 1 0 20%; /* Adjust width of image boxes */
+    flex: 1 0 20%;
     display: flex;
     align-items: center;
     justify-content: center;
