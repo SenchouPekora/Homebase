@@ -131,6 +131,23 @@
                 document.getElementById('announcementBanner').style.display = 'none';
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+    const closeBtn = document.getElementById('closeBtn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            const overlay = document.getElementById('postOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            } else {
+                console.error('Overlay element not found');
+            }
+        });
+    } else {
+        console.error('Close button not found');
+    }
+});
+
     </script>    
     </div>
 
