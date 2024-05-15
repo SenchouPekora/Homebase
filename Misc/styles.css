@@ -198,3 +198,31 @@ input[type="file"] {
     max-height: 100%;
     object-fit: cover;
 }
+
+.announcement-banner {
+    width: 100%;
+    background-color: #4a90e2; /* Blue shade for the banner */
+    color: white;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px 10px 0 0; /* Rounded corners at the top */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Makes sure the banner is above other elements */
+}
+
+.announcement-banner .close {
+    font-size: 25px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
+.announcement-banner .close:hover {
+    color: #ff0000;
+}

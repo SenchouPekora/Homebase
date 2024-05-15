@@ -8,6 +8,11 @@
 </head>
 <body>
 <div class="header">
+    <div id="announcementBanner" class="announcement-banner">
+        <span id="bannerClose" class="close">&times;</span>
+        <p>Welcome to Homebase 0.0.9</p>
+    </div>
+    
     <h1>Homebase</h1>
     <a href="https://github.com/SenchouPekora" target="_blank">
         <img src="Misc/git.png" alt="GitHub">
@@ -115,6 +120,11 @@
                     document.getElementById('posts').appendChild(postElement);
                 });
             });
+
+            document.getElementById('bannerClose').addEventListener('click', function() {
+                document.getElementById('announcementBanner').style.display = 'none';
+            });
+
         </script>
     </div>
 
