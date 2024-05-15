@@ -3,7 +3,7 @@
 <head>
     <title>Homebase</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="Misc/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         #postBody {
             display: flex;
@@ -30,15 +30,19 @@
             width: 500px;
         }
         #commentDisplayName, #commentText {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 16px;
-            background-color: #f8f8f8;
+            background-color: #092e9a;  /* Dark blue background */
+            color: white;               /* White text color */
+            border: 2px solid #1c2e65;  /* Slightly lighter blue border */
+            border-radius: 5px;         /* Rounded corners */
+            padding: 10px;              /* Padding inside the text box */
+            font-family: 'Montserrat', sans-serif; /* Consistent font */
+            box-sizing: border-box;     /* Border and padding included in width/height */
+            width: calc(100% - 22px);   /* Full width accounting for padding and border */
+            outline: none;              /* Removes the outline to keep style consistent */
+        }
+        #commentDisplayName::placeholder, #commentText::placeholder {
+            color: #ccc;                /* Light gray placeholder text for better readability */
+            opacity: 1;                 /* Ensures the placeholder is fully visible */
         }
         #commentText {
             min-height: 80px;
@@ -55,18 +59,27 @@
         button:hover {
             background-color: #073c7a; /* Darker blue on hover */
         }
+        #comments {
+            display: flex;
+            flex-direction: column; /* Stacks children vertically */
+            align-items: center;    /* Centers comments if needed */
+            width: 500px;            /* Adjust width as necessary */
+        }
         .comment {
             border: 1px solid #ccc;
             border-radius: 8px;
             padding: 10px;
             margin-bottom: 10px;
             position: relative;
+            width: 100%; /* Full width of container */
         }
         .timestamp {
             display: block;
+            color: #aaa;
         }
         .commentDisplayName {
             font-weight: bold;
+            color: #092e9a; /* Matching the theme color */
         }
         .commentText {
             margin-left: 20px;
@@ -90,20 +103,19 @@
         <div id="comments">
             <!-- Comments will be appended here -->
         </div>
-    </div>    
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSyDKE6vm_FNpQKZoAzhV0iFYhtBgIQMhPfI",
-            authDomain: "homebase-5a001.firebaseapp.com",
-            projectId: "homebase-5a001",
-            storageBucket: "homebase-5a001.appspot.com",
-            messagingSenderId: "956333988657",
-            appId: "1:956333988657:web:8c431e1b48b07776e7fcf5",
-            measurementId: "G-PQ9FB5G7KT"
+            apiKey: "Your_API_Key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-messaging-sender-id",
+            appId: "your-app-id",
+            measurementId: "your-measurement-id"
         };
         firebase.initializeApp(firebaseConfig);
 
