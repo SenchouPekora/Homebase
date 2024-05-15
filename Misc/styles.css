@@ -57,23 +57,20 @@ button {
 
 /* Announcement Banner Styles */
 .announcement-banner {
-    width: 50%;              /* Banner width */
-    height: 65px;            /* Banner height */
-    margin-top: 20px;
-    background-color: #4a90e2;
-    color: white;
-    padding: 5px 20px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 10px;
-    position: fixed;
-    top: 20px;
-    left: 50%;               /* Set left to 50% of the viewport */
-    transform: translateX(-50%); /* Shift left by 50% of its own width */
-    z-index: 1000;
+    width: 100%;              /* Full width */
+    height: 65px;             /* Fixed height for consistency */
+    margin-top: 20px;         /* Space from the top of the page */
+    background-color: #4a90e2; /* Background color */
+    color: white;             /* Text color */
+    padding: 5px 20px;        /* Padding inside the banner */
+    box-sizing: border-box;   /* Handles box sizing */
+    display: flex;            /* Flex display to align text and close button */
+    justify-content: space-between; /* Space between content */
+    align-items: center;      /* Vertical alignment */
+    border-radius: 10px;      /* Rounded corners */
+    z-index: 1000;            /* High z-index if needed, but not essential if not fixed */
 }
+
 
 
 .announcement-banner .close {
