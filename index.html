@@ -40,89 +40,91 @@
         <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
         <script src="script.js"></script>
         <script>
-            const firebaseConfig = {
-                apiKey: "AIzaSyDKE6vm_FNpQKZoAzhV0iFYhtBgIQMhPfI",
-                authDomain: "homebase-5a001.firebaseapp.com",
-                projectId: "homebase-5a001",
-                storageBucket: "homebase-5a001.appspot.com",
-                messagingSenderId: "956333988657",
-                appId: "1:956333988657:web:8c431e1b48b07776e7fcf5",
-                measurementId: "G-PQ9FB5G7KT"
-            };
-            firebase.initializeApp(firebaseConfig);
-    
-            const db = firebase.firestore();
-            const storage = firebase.storage();
-    
-            document.getElementById('postBtn').addEventListener('click', () => {
-                const overlay = document.getElementById('postOverlay');
-                overlay.style.display = 'flex';
-                overlay.style.justifyContent = 'center';
-                overlay.style.alignItems = 'center';
-            });
-    
-            document.getElementById('closeBtn').addEventListener('click', () => {
-                document.getElementById('postOverlay').style.display = 'none';
-            });
-    
-            document.getElementById('submitPost').addEventListener('click', (e) => {
-                e.preventDefault();
-                const postText = document.getElementById('postText').value;
-                const imageFile = document.getElementById('imageUpload').files[0];
-    
-                if (!imageFile) {
-                    alert('Please select an image to upload.');
-                    return;
-                }
-    
-                const postId = db.collection('posts').doc().id;
-    
-                const uploadTask = storage.ref(`images/${postId}/image`).put(imageFile);
-    
-                uploadTask.on('state_changed', 
-                (snapshot) => {
-                    // progress function
-                }, 
-                (error) => {
-                    console.log(error);
-                }, 
-                () => {
-                    storage.ref(`images/${postId}`).child('image').getDownloadURL().then(url => {
-                        db.collection('posts').doc(postId).set({
-                            text: postText,
-                            imageUrl: url,
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                        }).then(() => {
-                            document.getElementById('postOverlay').style.display = 'none';
-                            document.getElementById('postText').value = '';
-                            document.getElementById('imageUpload').value = '';
-                        }).catch((error) => {
-                            console.error("Error adding document: ", error);
-                        });
-                    })
+            document.addEventListener('DOMContentLoaded', function() {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyDKE6vm_FNpQKZoAzhV0iFYhtBgIQMhPfI",
+                    authDomain: "homebase-5a001.firebaseapp.com",
+                    projectId: "homebase-5a001",
+                    storageBucket: "homebase-5a001.appspot.com",
+                    messagingSenderId: "956333988657",
+                    appId: "1:956333988657:web:8c431e1b48b07776e7fcf5",
+                    measurementId: "G-PQ9FB5G7KT"
+                };
+                firebase.initializeApp(firebaseConfig);
+        
+                const db = firebase.firestore();
+                const storage = firebase.storage();
+        
+                // Ensure all element IDs are correct and elements exist in the DOM
+                document.getElementById('postBtn').addEventListener('click', () => {
+                    const overlay = document.getElementById('postOverlay');
+                    overlay.style.display = 'flex';
+                    overlay.style.justifyContent = 'center';
+                    overlay.style.alignItems = 'center';
+                });
+        
+                document.getElementById('closeBtn').addEventListener('click', () => {
+                    document.getElementById('postOverlay').style.display = 'none';
+                });
+        
+                document.getElementById('submitPost').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const postText = document.getElementById('postText').value;
+                    const imageFile = document.getElementById('imageUpload').files[0];
+        
+                    if (!imageFile) {
+                        alert('Please select an image to upload.');
+                        return;
+                    }
+        
+                    const postId = db.collection('posts').doc().id;
+        
+                    const uploadTask = storage.ref(`images/${postId}/image`).put(imageFile);
+        
+                    uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        // progress function
+                    }, 
+                    (error) => {
+                        console.log(error);
+                    }, 
+                    () => {
+                        storage.ref(`images/${postId}`).child('image').getDownloadURL().then(url => {
+                            db.collection('posts').doc(postId).set({
+                                text: postText,
+                                imageUrl: url,
+                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                            }).then(() => {
+                                document.getElementById('postOverlay').style.display = 'none';
+                                document.getElementById('postText').value = '';
+                                document.getElementById('imageUpload').value = '';
+                            }).catch((error) => {
+                                console.error("Error adding document: ", error);
+                            });
+                        })
+                    });
+                });
+        
+                db.collection('posts').orderBy('timestamp', 'desc').limit(5).onSnapshot(snapshot => {
+                    document.getElementById('posts').innerHTML = '';
+                    snapshot.forEach(doc => {
+                        const post = doc.data();
+                        const postElement = document.createElement('div');
+                        postElement.classList.add('post');
+                        postElement.innerHTML = `
+                            <p>${post.text.substring(0, 20)}...</p>
+                            <a href="post.html?id=${doc.id}">
+                                <img src="${post.imageUrl}" style="width: 150px; height: auto; object-fit: cover;">
+                            </a>`;
+                        document.getElementById('posts').appendChild(postElement);
+                    });
+                });
+        
+                document.getElementById('bannerClose').addEventListener('click', function() {
+                    document.getElementById('announcementBanner').style.display = 'none';
                 });
             });
-    
-            db.collection('posts').orderBy('timestamp', 'desc').limit(5).onSnapshot(snapshot => {
-                document.getElementById('posts').innerHTML = '';
-                snapshot.forEach(doc => {
-                    const post = doc.data();
-                    const postElement = document.createElement('div');
-                    postElement.classList.add('post');
-                    postElement.innerHTML = `
-                        <p>${post.text.substring(0, 20)}...</p>
-                        <a href="post.html?id=${doc.id}">
-                            <img src="${post.imageUrl}" style="width: 150px; height: auto; object-fit: cover;">
-                        </a>`;
-                    document.getElementById('posts').appendChild(postElement);
-                });
-            });
-
-            document.getElementById('bannerClose').addEventListener('click', function() {
-                document.getElementById('announcementBanner').style.display = 'none';
-            });
-
-        </script>
+        </script>        
     </div>
 
     <div class="category">
