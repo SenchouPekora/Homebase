@@ -20,7 +20,7 @@
     <div class="category">
         <h3>Homebase Posts</h3>
         <div class="button-row">
-            <button id="submitPost" class="button">Submit Post</button>
+            <button id="createPostBtn" class="button">Create a Post</button>
             <button id="viewAllPosts" class="button">View all posts</button>
         </div>
         <div id="postOverlay">
@@ -63,55 +63,53 @@
             const db = firebase.firestore();
             const storage = firebase.storage();
 
-            document.getElementById('submitPost').addEventListener('click', () => {
-                const overlay = document.getElementById('postOverlay');
-                overlay.style.display = 'flex';
-                overlay.style.justifyContent = 'center';
-                overlay.style.alignItems = 'center';
-            });
+            document.getElementById('createPostBtn').addEventListener('click', () => {
+        const overlay = document.getElementById('postOverlay');
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+    });
 
-            document.getElementById('closeBtn').addEventListener('click', () => {
-                document.getElementById('postOverlay').style.display = 'none';
-            });
+    // Button inside the overlay to submit the post
+    const submitPostBtn = document.querySelector('#postOverlay button[type="submit"]');
+    submitPostBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const postText = document.querySelector('#postOverlay textarea').value;
+        const imageFile = document.querySelector('#postOverlay input[type="file"]').files[0];
 
-            document.getElementById('submitPost').addEventListener('click', (e) => {
-                e.preventDefault();
-                const postText = document.querySelector('textarea').value;
-                const imageFile = document.getElementById('imageUpload').files[0];
+        if (!imageFile) {
+            alert('Please select an image to upload.');
+            return;
+        }
 
-                if (!imageFile) {
-                    alert('Please select an image to upload.');
-                    return;
-                }
+        const postId = db.collection('posts').doc().id;
 
-                const postId = db.collection('posts').doc().id;
+        const uploadTask = storage.ref(`images/${postId}/image`).put(imageFile);
 
-                const uploadTask = storage.ref(`images/${postId}/image`).put(imageFile);
-
-                uploadTask.on('state_changed', 
-                    (snapshot) => {
-                        // progress function, possibly update UI here
-                    }, 
-                    (error) => {
-                        console.error('Upload error:', error);
-                    }, 
-                    () => {
-                        uploadTask.snapshot.ref.getDownloadURL().then(url => {
-                            db.collection('posts').doc(postId).set({
-                                text: postText,
-                                imageUrl: url,
-                                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                            }).then(() => {
-                                document.getElementById('postOverlay').style.display = 'none';
-                                document.querySelector('textarea').value = '';
-                                document.getElementById('imageUpload').value = null; // Reset file input
-                            }).catch((error) => {
-                                console.error("Error adding document: ", error);
-                            });
-                        });
-                    }
-                );
-            });
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                // progress function
+            }, 
+            (error) => {
+                console.error('Upload error:', error);
+            }, 
+            () => {
+                uploadTask.snapshot.ref.getDownloadURL().then(url => {
+                    db.collection('posts').doc(postId).set({
+                        text: postText,
+                        imageUrl: url,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        document.getElementById('postOverlay').style.display = 'none';
+                        document.querySelector('#postOverlay textarea').value = '';
+                        document.querySelector('#postOverlay input[type="file"]').value = null;
+                    }).catch((error) => {
+                        console.error("Error adding document: ", error);
+                    });
+                });
+            }
+        );
+    });
 
             db.collection('posts').orderBy('timestamp', 'desc').limit(5).onSnapshot(snapshot => {
                 const postsContainer = document.getElementById('posts');
