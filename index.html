@@ -63,54 +63,72 @@
             const db = firebase.firestore();
             const storage = firebase.storage();
 
-            document.getElementById('createPostBtn').addEventListener('click', () => {
-        const overlay = document.getElementById('postOverlay');
-        overlay.style.display = 'flex';
-        overlay.style.justifyContent = 'center';
-        overlay.style.alignItems = 'center';
-    });
+            // Event listeners for UI elements
+            const createPostBtn = document.getElementById('createPostBtn');
+            const closePostBtn = document.getElementById('closeBtn');
+            const submitPostBtn = document.querySelector('#postOverlay button[type="submit"]');
+            const bannerClose = document.getElementById('bannerClose');
+            const announcementBanner = document.getElementById('announcementBanner');
 
-    // Button inside the overlay to submit the post
-    const submitPostBtn = document.querySelector('#postOverlay button[type="submit"]');
-    submitPostBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const postText = document.querySelector('#postOverlay textarea').value;
-        const imageFile = document.querySelector('#postOverlay input[type="file"]').files[0];
-
-        if (!imageFile) {
-            alert('Please select an image to upload.');
-            return;
-        }
-
-        const postId = db.collection('posts').doc().id;
-
-        const uploadTask = storage.ref(`images/${postId}/image`).put(imageFile);
-
-        uploadTask.on('state_changed', 
-            (snapshot) => {
-                // progress function
-            }, 
-            (error) => {
-                console.error('Upload error:', error);
-            }, 
-            () => {
-                uploadTask.snapshot.ref.getDownloadURL().then(url => {
-                    db.collection('posts').doc(postId).set({
-                        text: postText,
-                        imageUrl: url,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    }).then(() => {
-                        document.getElementById('postOverlay').style.display = 'none';
-                        document.querySelector('#postOverlay textarea').value = '';
-                        document.querySelector('#postOverlay input[type="file"]').value = null;
-                    }).catch((error) => {
-                        console.error("Error adding document: ", error);
-                    });
+            if (createPostBtn) {
+                createPostBtn.addEventListener('click', () => {
+                    document.getElementById('postOverlay').style.display = 'flex';
                 });
             }
-        );
-    });
 
+            if (closePostBtn) {
+                closePostBtn.addEventListener('click', () => {
+                    document.getElementById('postOverlay').style.display = 'none';
+                });
+            }
+
+            if (submitPostBtn) {
+                submitPostBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const postText = document.querySelector('#postOverlay textarea').value;
+                    const imageFile = document.querySelector('#postOverlay input[type="file"]').files[0];
+
+                    if (!imageFile) {
+                        alert('Please select an image to upload.');
+                        return;
+                    }
+
+                    const postId = db.collection('posts').doc().id;
+                    const uploadTask = storage.ref(`images/${postId}/image`).put(imageFile);
+
+                    uploadTask.on('state_changed', 
+                        (snapshot) => {
+                            // progress function
+                        }, 
+                        (error) => {
+                            console.error('Upload error:', error);
+                        }, 
+                        () => {
+                            uploadTask.snapshot.ref.getDownloadURL().then(url => {
+                                db.collection('posts').doc(postId).set({
+                                    text: postText,
+                                    imageUrl: url,
+                                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                                }).then(() => {
+                                    document.getElementById('postOverlay').style.display = 'none';
+                                    document.querySelector('#postOverlay textarea').value = '';
+                                    document.querySelector('#postOverlay input[type="file"]').value = null;
+                                }).catch((error) => {
+                                    console.error("Error adding document: ", error);
+                                });
+                            });
+                        }
+                    );
+                });
+            }
+
+            if (bannerClose && announcementBanner) {
+                bannerClose.addEventListener('click', () => {
+                    announcementBanner.style.display = 'none';
+                });
+            }
+
+            // Fetch and display posts
             db.collection('posts').orderBy('timestamp', 'desc').limit(5).onSnapshot(snapshot => {
                 const postsContainer = document.getElementById('posts');
                 postsContainer.innerHTML = ''; // Clear previous posts
@@ -121,41 +139,12 @@
                     postElement.innerHTML = `
                         <p>${post.text.substring(0, 100)}...</p>
                         <a href="post.html?id=${doc.id}">
-                            <img src="${post.imageUrl}" style="width: 150px; height: auto; object-fit: cover;">
+                            <img src="${post.imageUrl}" style="width: 150px; height:auto; object-fit: cover;">
                         </a>`;
                     postsContainer.appendChild(postElement);
                 });
             });
-
-            document.getElementById('bannerClose').addEventListener('click', function() {
-                document.getElementById('announcementBanner').style.display = 'none';
-            });
         });
-
-        document.addEventListener('DOMContentLoaded', function() {
-    const closeBtn = document.getElementById('closeBtn');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', function() {
-            const overlay = document.getElementById('postOverlay');
-            if (overlay) {
-                overlay.style.display = 'none';
-            } else {
-                console.error('Overlay element not found');
-            }
-        });
-    } else {
-        console.error('Close button not found');
-    }
-});
-
-    </script>    
-    </div>
-
-    <div class="category">
-        <h3>The Vault</h3>
-        <div class="button-row">
-            <a href="gallery.html?character=BlueArchive" class="character-button">Blue Archive</a>
-        </div>
-    </div>
+    </script>
 </body>
 </html>
