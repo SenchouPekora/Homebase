@@ -4,43 +4,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Homebase | Favorites</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="Misc/styles.css">
     <style>
-        body {
-            background-color: #0f1936;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Montserrat', sans-serif;
-        }
-        h1 {
-            text-align: center;
-        }
+        /* Isolated styling for favorites page */
         #image-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             padding: 20px;
+            margin-top: 20px; /* Ensures there's some space between the title and images */
         }
+
         .image-box {
             margin: 10px;
             transition: transform 0.3s ease;
-            width: 150px; /* Set a fixed width for each image box */
-            height: 150px; /* Set a fixed height to maintain aspect ratio */
+            width: 150px; /* Fixed width for each image box */
+            height: 150px; /* Fixed height to maintain aspect ratio */
             overflow: hidden; /* Ensures no overflow of content within the box */
             border-radius: 10px; /* Rounded corners for the image boxes */
             box-shadow: 0 4px 8px rgba(0,0,0,0.5); /* Subtle shadow for depth */
         }
+
         .image-box img {
             width: 100%;
             height: 100%;
             object-fit: cover; /* Ensures the images cover the area of the box without distortion */
         }
+
         .image-box:hover {
-            transform: scale(1.1); /* Slight scale to indicate interactivity on hover */
+            transform: scale(1.1); /* Scale effect to indicate interactivity on hover */
         }
     </style>
 </head>
@@ -52,13 +44,13 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSyDKE6vm_FNpQKZoAzhV0iFYhtBgIQMhPfI",
-            authDomain: "homebase-5a001.firebaseapp.com",
-            projectId: "homebase-5a001",
-            storageBucket: "homebase-5a001.appspot.com",
-            messagingSenderId: "956333988657",
-            appId: "1:956333988657:web:8c431e1b48b07776e7fcf5",
-            measurementId: "G-PQ9FB5G7KT"
+            apiKey: "Your_API_Key",
+            authDomain: "Your_Auth_Domain",
+            projectId: "Your_Project_ID",
+            storageBucket: "Your_Storage_Bucket",
+            messagingSenderId: "Your_Messaging_Sender_ID",
+            appId: "Your_App_ID",
+            measurementId: "Your_Measurement_ID"
         };
         firebase.initializeApp(firebaseConfig);
 
@@ -75,6 +67,7 @@
                         a.href = `viewer.html?id=${doc.id}`;
 
                         a.appendChild(img);
+
                         document.getElementById('image-container').appendChild(a);
                     });
                 });
