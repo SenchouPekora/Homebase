@@ -236,3 +236,12 @@ input[type="file"] {
     color: #ccc;                /* Light gray placeholder text for better readability */
     opacity: 1;                 /* Ensures the placeholder is fully visible */
 }
+
+/* Specific styles for gallery.html */
+#gallery-image-container {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-y: auto;
+}

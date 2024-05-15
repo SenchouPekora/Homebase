@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="icon" href="drivebooru.ico" type="image/x-icon">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Homebase</title>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="Misc/styles.css">
-    </head>
+<head>
+    <link rel="icon" href="drivebooru.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Homebase | Vault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="Misc/styles.css">
+</head>
 <body>
-    <div id="image-container"></div>
-    <div id="pagination"></div>
+    <div id="gallery-image-container"></div>
+    <div id="gallery-pagination"></div>
     <script>
         var currentPage = 1;
         var imagesPerPage = 36;
         var lines = [];
 
         window.addEventListener('load', function() {
-    var params = new URLSearchParams(window.location.search);
-    var character = params.get('character');
-    fetch(`Lists/${character}.txt`)
-        .then(response => response.text())
-        .then(data => {
-            lines = data.split('\n').filter(line => line.trim());
-            displayPage(currentPage);
-            displayPagination();
+            var params = new URLSearchParams(window.location.search);
+            var character = params.get('character');
+            fetch(`Lists/${character}.txt`)
+                .then(response => response.text())
+                .then(data => {
+                    lines = data.split('\n').filter(line => line.trim());
+                    displayPage(currentPage);
+                    displayPagination();
+                });
         });
-});
 
         function displayPage(pageNumber) {
-            var imageContainer = document.getElementById('image-container');
+            var imageContainer = document.getElementById('gallery-image-container');
             imageContainer.innerHTML = '';
             currentPage = pageNumber;
 
@@ -39,7 +39,7 @@
             pageLines.forEach(line => {
                 const img = document.createElement('img');
                 img.src = `https://drive.google.com/thumbnail?id=${line}&sz=w150`;
-                img.classList.add('image-box');
+                img.classList.add('gallery-image-box');
 
                 const a = document.createElement('a');
                 a.href = `javascript:void(0)`;
@@ -48,56 +48,52 @@
                 };
 
                 a.appendChild(img);
-
                 imageContainer.appendChild(a);
             });
         }
 
         function displayPagination() {
-    var paginationDiv = document.getElementById('pagination');
-    paginationDiv.innerHTML = '';
+            var paginationDiv = document.getElementById('gallery-pagination');
+            paginationDiv.innerHTML = '';
 
-    createButton(paginationDiv, 'Home', 'index.html');
+            createButton(paginationDiv, 'Home', 'index.html');
+            var totalPages = Math.ceil(lines.length / imagesPerPage);
 
-    var totalPages = Math.ceil(lines.length / imagesPerPage);
+            createButton(paginationDiv, '<<', 1, totalPages);
+            createButton(paginationDiv, '<', Math.max(1, currentPage - 1), totalPages);
 
-    createButton(paginationDiv, '<<', 1, totalPages);
-    createButton(paginationDiv, '<', Math.max(1, currentPage - 1), totalPages);
+            var start = Math.max(1, currentPage - 2);
+            var end = Math.min(totalPages, currentPage + 2);
+            for (let i = start; i <= end; i++) {
+                createButton(paginationDiv, i.toString(), i, totalPages);
+            }
 
-    var start = Math.max(1, currentPage - 2);
-    var end = Math.min(totalPages, currentPage + 2);
-    for (let i = start; i <= end; i++) {
-        createButton(paginationDiv, i.toString(), i, totalPages);
-    }
-
-    createButton(paginationDiv, '>', Math.min(totalPages, currentPage + 1), totalPages);
-    createButton(paginationDiv, '>>', totalPages, totalPages);
-
-    createButton(paginationDiv, 'Favorites', 'favorites.html');
-}
-
-function createButton(container, text, action, totalPages) {
-    var button = document.createElement('div');
-    button.textContent = text;
-    button.classList.add('page-number');
-
-    if (typeof action === 'string') {
-        button.onclick = function() {
-            window.location.href = action;
-        };
-    } else {
-        if (action === currentPage || action < 1 || action > totalPages) {
-            button.classList.add('disabled');
-        } else {
-            button.onclick = function() {
-                displayPage(action);
-                displayPagination();
-            };
+            createButton(paginationDiv, '>', Math.min(totalPages, currentPage + 1), totalPages);
+            createButton(paginationDiv, '>>', totalPages, totalPages);
+            createButton(paginationDiv, 'Favorites', 'favorites.html');
         }
-    }
 
-    container.appendChild(button);
-}
+        function createButton(container, text, action, totalPages) {
+            var button = document.createElement('div');
+            button.textContent = text;
+            button.classList.add('gallery-page-number');
+
+            if (typeof action === 'string') {
+                button.onclick = function() {
+                    window.location.href = action;
+                };
+            } else {
+                if (action === currentPage || action < 1 || action > totalPages) {
+                    button.classList.add('disabled');
+                } else {
+                    button.onclick = function() {
+                        displayPage(action);
+                        displayPagination();
+                    };
+                }
+            }
+            container.appendChild(button);
+        }
     </script>
 </body>
 </html>
