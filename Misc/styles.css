@@ -219,3 +219,20 @@ input[type="file"] {
     margin-top: 10px;
     text-align: center;
 }
+
+#commentForm input[type="text"], #commentForm textarea {
+    background-color: #092e9a;  /* Dark blue background */
+    color: white;               /* White text color */
+    border: 2px solid #1c2e65;  /* Slightly lighter blue border */
+    border-radius: 5px;         /* Rounded corners */
+    padding: 10px;              /* Padding inside the text box */
+    font-family: 'Montserrat', sans-serif; /* Consistent font */
+    box-sizing: border-box;     /* Border and padding included in width/height */
+    width: calc(100% - 22px);   /* Full width accounting for padding and border */
+    outline: none;              /* Removes the outline to keep style consistent */
+}
+
+#commentForm input[type="text"]::placeholder, #commentForm textarea::placeholder {
+    color: #ccc;                /* Light gray placeholder text for better readability */
+    opacity: 1;                 /* Ensures the placeholder is fully visible */
+}
