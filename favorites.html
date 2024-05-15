@@ -6,33 +6,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="Misc/styles.css">
     <style>
-        /* Isolated styling for favorites page */
+        body {
+            background-color: #0f1936;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
         #image-container {
+            position: relative;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            padding: 20px;
-            margin-top: 20px; /* Ensures there's some space between the title and images */
+            overflow-y: auto;
         }
-
         .image-box {
+            background-color: #092e9a;
+            padding: 20px;
+            border-radius: 10px;
             margin: 10px;
-            transition: transform 0.3s ease;
-            width: 150px; /* Fixed width for each image box */
-            height: 150px; /* Fixed height to maintain aspect ratio */
-            overflow: hidden; /* Ensures no overflow of content within the box */
-            border-radius: 10px; /* Rounded corners for the image boxes */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5); /* Subtle shadow for depth */
+            flex: 1 0 20%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
         .image-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures the images cover the area of the box without distortion */
-        }
-
-        .image-box:hover {
-            transform: scale(1.1); /* Scale effect to indicate interactivity on hover */
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -67,6 +72,7 @@
                         a.href = `viewer.html?id=${doc.id}`;
 
                         a.appendChild(img);
+
                         document.getElementById('image-container').appendChild(a);
                     });
                 });
