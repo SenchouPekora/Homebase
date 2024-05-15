@@ -25,8 +25,26 @@
         }
         #commentForm {
             display: flex;
-            justify-content: space-between;
-            width: 500px;
+            flex-direction: column;
+            align-items: center;
+            width: 500px; /* Adjust the form width as needed */
+        }
+        #commentDisplayName, #commentText {
+            width: 100%; /* Full width within the form */
+            margin-bottom: 10px; /* Space between the form elements */
+        }
+        #commentDisplayName {
+            max-width: 300px; /* Restricts the width of the input box */
+            height: 40px; /* Fixed height for the input */
+        }
+        #commentText {
+            min-height: 80px; /* Minimum height for the textarea */
+            resize: vertical; /* Allows vertical resizing only */
+        }
+        button {
+            width: auto; /* Auto width based on content */
+            padding: 8px 16px; /* Padding inside the button */
+            margin-top: 10px; /* Space above the button */
         }
         #comments {
             width: 500px;
@@ -59,14 +77,14 @@
     </div>
     <div id="commentSection">
         <form id="commentForm">
-            <input type="text" id="commentDisplayName" placeholder="Display Name">
-            <textarea id="commentText" placeholder="Comment"></textarea>
-            <button type="submit">Post Comment</button>
+            <input type="text" id="commentDisplayName" placeholder="Display Name" maxlength="16">
+            <textarea id="commentText" placeholder="Write some text..."></textarea>
+            <button type="submit">Post</button>
         </form>
         <div id="comments">
             <!-- Comments will be appended here -->
         </div>
-
+    </div>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
@@ -82,8 +100,8 @@
         };
         firebase.initializeApp(firebaseConfig);
 
-        const auth = firebase.auth();
         const db = firebase.firestore();
+        const auth = firebase.auth();
 
         const urlParams = new URLSearchParams(window.location.search);
         const postId = urlParams.get('id');
@@ -93,19 +111,21 @@
             document.getElementById('displayName').textContent = post.displayName;
             document.getElementById('postText').textContent = post.text;
             document.getElementById('postImage').src = post.imageUrl;
+            document.getElementById('timePosted').textContent = new Date(post.timestamp.seconds * 1000).toLocaleString();
         });
 
         db.collection('posts').doc(postId).collection('comments').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
-            document.getElementById('comments').innerHTML = '';
+            const commentsContainer = document.getElementById('comments');
+            commentsContainer.innerHTML = ''; // Clear previous comments
             snapshot.forEach(doc => {
                 const comment = doc.data();
                 const commentElement = document.createElement('div');
                 commentElement.classList.add('comment');
                 commentElement.innerHTML = `
                     <span class="timestamp">${new Date(comment.timestamp.seconds * 1000).toLocaleString()}</span>
-                    <h2>${comment.displayName}</h2>
-                    <p>${comment.text}</p>`;
-                document.getElementById('comments').appendChild(commentElement);
+                    <h2 class="commentDisplayName">${comment.displayName}</h2>
+                    <p class="commentText">${comment.text}</p>`;
+                commentsContainer.appendChild(commentElement);
             });
         });
 
@@ -113,13 +133,20 @@
             event.preventDefault();
             const displayName = document.getElementById('commentDisplayName').value;
             const text = document.getElementById('commentText').value;
+            if (!displayName || !text) {
+                alert('Both display name and comment must be filled out.');
+                return;
+            }
             db.collection('posts').doc(postId).collection('comments').add({
                 displayName: displayName,
                 text: text,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById('commentDisplayName').value = '';
+                document.getElementById('commentText').value = '';
+            }).catch(error => {
+                console.error("Error posting comment: ", error);
             });
-            document.getElementById('commentDisplayName').value = '';
-            document.getElementById('commentText').value = '';
         });
 
         document.getElementById('postImage').addEventListener('click', event => {
