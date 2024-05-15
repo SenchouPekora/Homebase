@@ -57,8 +57,8 @@ button {
 
 /* Announcement Banner Styles */
 .announcement-banner {
-    width: 50%;
-    height: 65px;
+    width: 50%;              /* Banner width */
+    height: 65px;            /* Banner height */
     margin-top: 20px;
     background-color: #4a90e2;
     color: white;
@@ -70,9 +70,11 @@ button {
     border-radius: 10px;
     position: fixed;
     top: 20px;
-    left: 10%;
+    left: 50%;               /* Set left to 50% of the viewport */
+    transform: translateX(-50%); /* Shift left by 50% of its own width */
     z-index: 1000;
 }
+
 
 .announcement-banner .close {
     font-size: 25px;
