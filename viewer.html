@@ -1,20 +1,55 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Homebase</title>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="Misc/styles.css">
-    </head>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Homebase | Viewer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="Misc/styles.css">
+    <style>
+        body {
+            background-color: #0f1936;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+        iframe {
+            width: 90vw;
+            height: 80vh;
+            border: none;
+        }
+        .viewer-button-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .viewer-button {
+            background-color: #092e9a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .viewer-button:hover {
+            background-color: #073c7a; /* Darker blue on hover */
+        }
+    </style>
+</head>
 <body>
     <iframe id="image" src="" allowfullscreen></iframe>
-    <div id="button-row-1" class="button-row">
-        <button id="download">Download</button>
-        <button id="favorite" style="display: none;">Add to favorites</button>
-        <button id="sign-in">Sign-in to favorite</button>
+    <div id="button-row-1" class="viewer-button-row">
+        <button id="download" class="viewer-button">Download</button>
+        <button id="favorite" class="viewer-button" style="display: none;">Add to favorites</button>
+        <button id="sign-in" class="viewer-button">Sign-in to favorite</button>
     </div>
-    <div id="button-row-2" class="button-row">
-        <button id="view-favorites">View favorites</button>
+    <div id="button-row-2" class="viewer-button-row">
+        <button id="view-favorites" class="viewer-button">View favorites</button>
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
@@ -22,12 +57,12 @@
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDKE6vm_FNpQKZoAzhV0iFYhtBgIQMhPfI",
-                authDomain: "homebase-5a001.firebaseapp.com",
-                projectId: "homebase-5a001",
-                storageBucket: "homebase-5a001.appspot.com",
-                messagingSenderId: "956333988657",
-                appId: "1:956333988657:web:8c431e1b48b07776e7fcf5",
-                measurementId: "G-PQ9FB5G7KT"
+            authDomain: "homebase-5a001.firebaseapp.com",
+            projectId: "homebase-5a001",
+            storageBucket: "homebase-5a001.appspot.com",
+            messagingSenderId: "956333988657",
+            appId: "1:956333988657:web:8c431e1b48b07776e7fcf5",
+            measurementId: "G-PQ9FB5G7KT"
         };
         firebase.initializeApp(firebaseConfig);
 
@@ -35,6 +70,7 @@
         var id = params.get('id');
         var imageUrl = `https://drive.google.com/file/d/${id}/preview`;
         document.getElementById('image').src = imageUrl;
+
         document.getElementById('download').onclick = function() {
             window.location.href = `https://drive.google.com/uc?export=download&id=${id}`;
         };
@@ -42,11 +78,10 @@
         var provider = new firebase.auth.GoogleAuthProvider();
         document.getElementById('sign-in').onclick = function() {
             firebase.auth().signInWithPopup(provider).then(function(result) {
-                console.log('User signed in');
                 document.getElementById('sign-in').style.display = 'none';
                 document.getElementById('favorite').style.display = 'inline-block';
             }).catch(function(error) {
-                console.log(error.message);
+                console.error('Sign-in error:', error);
             });
         };
 
@@ -58,65 +93,38 @@
                 docRef.get().then(function(doc) {
                     if (doc.exists) {
                         docRef.delete().then(function() {
-                            console.log('Image removed from favorites');
                             document.getElementById('favorite').innerText = 'Add to favorites';
                         }).catch(function(error) {
-                            console.error('Error removing image from favorites: ', error);
+                            console.error('Error removing image:', error);
                         });
                     } else {
                         docRef.set({}).then(function() {
-                            console.log('Image added to favorites');
                             document.getElementById('favorite').innerText = 'Remove from favorites';
                         }).catch(function(error) {
-                            console.error('Error adding image to favorites: ', error);
+                            console.error('Error adding image:', error);
                         });
                     }
                 }).catch(function(error) {
-                    console.log('Error getting document:', error);
+                    console.error('Error fetching document:', error);
                 });
             } else {
-                console.log('User not signed in');
+                console.error('User not signed in');
             }
         };
 
         firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        document.getElementById('sign-in').style.display = 'none';
-        document.getElementById('favorite').style.display = 'inline-block';
-        document.getElementById('view-favorites').style.display = 'inline-block';
-        var db = firebase.firestore();
-        var docRef = db.collection('users').doc(user.uid).collection('favorites').doc(id);
-        docRef.get().then(function(doc) {
-            if (doc.exists) {
-                document.getElementById('favorite').innerText = 'Remove from favorites';
+            if (user) {
+                document.getElementById('sign-in').style.display = 'none';
+                document.getElementById('favorite').style.display = 'inline-block';
             } else {
-                document.getElementById('favorite').innerText = 'Add to favorites';
+                document.getElementById('sign-in').style.display = 'inline-block';
+                document.getElementById('favorite').style.display = 'none';
             }
-        }).catch(function(error) {
-            console.log('Error getting document:', error);
         });
-    } else {
-        document.getElementById('sign-in').style.display = 'inline-block';
-        document.getElementById('favorite').style.display = 'none';
-        document.getElementById('view-favorites').style.display = 'none';
-    }
-});
 
-document.getElementById('view-favorites').onclick = function() {
-    window.location.href = 'favorites.html';
-};
-
-window.addEventListener('load', function() {
-    var params = new URLSearchParams(window.location.search);
-    var character = params.get('character');
-    fetch(`Lists/${character}.txt`)
-        .then(response => response.text())
-        .then(data => {
-            lines = data.split('\n').filter(line => line.trim());
-            displayPage(currentPage);
-            displayPagination();
-        });
-});
+        document.getElementById('view-favorites').onclick = function() {
+            window.location.href = 'favorites.html';
+        };
     </script>
 </body>
 </html>
