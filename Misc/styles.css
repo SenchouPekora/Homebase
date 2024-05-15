@@ -57,9 +57,9 @@ button {
 
 /* Announcement Banner Styles */
 .announcement-banner {
-    width: 80%;
-    height: 40px;
-    margin-top: 10px;
+    width: 50%;
+    height: 65px;
+    margin-top: 20px;
     background-color: #4a90e2;
     color: white;
     padding: 5px 20px;
@@ -179,4 +179,44 @@ button {
 
 #postImage, .image-box img {
     object-fit: cover;
+}
+
+/* Custom Text Box */
+textarea {
+    background-color: #092e9a;  /* Dark blue background */
+    color: white;               /* White text color */
+    border: 2px solid #1c2e65;  /* Slightly lighter blue border */
+    border-radius: 5px;         /* Rounded corners */
+    padding: 10px;              /* Padding inside the text box */
+    font-family: 'Montserrat', sans-serif; /* Consistent font */
+    box-sizing: border-box;     /* Border and padding included in width/height */
+    width: calc(100% - 22px);   /* Full width accounting for padding and border */
+}
+
+/* Customizing the file input by hiding the default input and using a label as the button */
+input[type="file"] {
+    opacity: 0;                 /* Hide the actual input */
+    position: absolute;
+    z-index: -1;
+}
+
+.label-file-upload {
+    display: inline-block;
+    background-color: #092e9a;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 2px solid #1c2e65;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.label-file-upload:hover {
+    background-color: #1c2e65; /* Slightly lighter blue on hover */
+}
+
+/* This is the label that is clickable, styled to look like a button */
+.label-file-upload {
+    margin-top: 10px;
+    text-align: center;
 }
