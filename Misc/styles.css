@@ -57,7 +57,7 @@ button {
 
 /* Announcement Banner Styles */
 .announcement-banner {
-    width: 100%;              /* Full width */
+    width: 50%;              /* Full width */
     height: 65px;             /* Fixed height for consistency */
     margin-top: 20px;         /* Space from the top of the page */
     background-color: #4a90e2; /* Background color */

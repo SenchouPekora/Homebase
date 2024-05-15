@@ -27,27 +27,33 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 500px; /* Adjust the form width as needed */
+            width: 500px;
         }
         #commentDisplayName, #commentText {
-            width: 100%; /* Full width within the form */
-            margin-bottom: 10px; /* Space between the form elements */
-        }
-        #commentDisplayName {
-            max-width: 300px; /* Restricts the width of the input box */
-            height: 40px; /* Fixed height for the input */
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            background-color: #f8f8f8;
         }
         #commentText {
-            min-height: 80px; /* Minimum height for the textarea */
-            resize: vertical; /* Allows vertical resizing only */
+            min-height: 80px;
+            resize: vertical;
         }
         button {
-            width: auto; /* Auto width based on content */
-            padding: 8px 16px; /* Padding inside the button */
-            margin-top: 10px; /* Space above the button */
+            padding: 8px 16px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
-        #comments {
-            width: 500px;
+        button:hover {
+            background-color: #45a049;
         }
         .comment {
             border: 1px solid #ccc;
@@ -72,19 +78,20 @@
         <h1 id="displayName"></h1>
         <p id="postText"></p>
         <p id="timePosted"></p>
-        <img id="postImage" src="">
+        <img id="postImage" src="" alt="Post Image">
         <p>Click image to view full-size</p>
     </div>
     <div id="commentSection">
         <form id="commentForm">
             <input type="text" id="commentDisplayName" placeholder="Display Name" maxlength="16">
             <textarea id="commentText" placeholder="Write some text..."></textarea>
-            <button type="submit">Post</button>
+            <button type="submit">Post Comment</button>
         </form>
         <div id="comments">
             <!-- Comments will be appended here -->
         </div>
     </div>
+
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
@@ -101,42 +108,51 @@
         firebase.initializeApp(firebaseConfig);
 
         const db = firebase.firestore();
-        const auth = firebase.auth();
 
         const urlParams = new URLSearchParams(window.location.search);
         const postId = urlParams.get('id');
 
         db.collection('posts').doc(postId).get().then(doc => {
-            const post = doc.data();
-            document.getElementById('displayName').textContent = post.displayName;
-            document.getElementById('postText').textContent = post.text;
-            document.getElementById('postImage').src = post.imageUrl;
-            document.getElementById('timePosted').textContent = new Date(post.timestamp.seconds * 1000).toLocaleString();
+            if (doc.exists) {
+                const post = doc.data();
+                document.getElementById('displayName').textContent = post.displayName || 'Anonymous';
+                document.getElementById('postText').textContent = post.text;
+                document.getElementById('postImage').src = post.imageUrl;
+                document.getElementById('timePosted').textContent = post.timestamp ? new Date(post.timestamp.seconds * 1000).toLocaleString() : 'Date not available';
+            } else {
+                console.log('No such post!');
+            }
         });
 
         db.collection('posts').doc(postId).collection('comments').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
             const commentsContainer = document.getElementById('comments');
-            commentsContainer.innerHTML = ''; // Clear previous comments
+            commentsContainer.innerHTML = '';
             snapshot.forEach(doc => {
                 const comment = doc.data();
-                const commentElement = document.createElement('div');
-                commentElement.classList.add('comment');
-                commentElement.innerHTML = `
-                    <span class="timestamp">${new Date(comment.timestamp.seconds * 1000).toLocaleString()}</span>
-                    <h2 class="commentDisplayName">${comment.displayName}</h2>
-                    <p class="commentText">${comment.text}</p>`;
-                commentsContainer.appendChild(commentElement);
+                if (comment.timestamp) {
+                    const commentElement = document.createElement('div');
+                    commentElement.classList.add('comment');
+                    commentElement.innerHTML = `
+                        <span class="timestamp">${new Date(comment.timestamp.seconds * 1000).toLocaleString()}</span>
+                        <h2 class="commentDisplayName">${comment.displayName}</h2>
+                        <p class="commentText">${comment.text}</p>`;
+                    commentsContainer.appendChild(commentElement);
+                } else {
+                    console.log("Timestamp missing for comment", comment);
+                }
             });
         });
 
         document.getElementById('commentForm').addEventListener('submit', event => {
             event.preventDefault();
-            const displayName = document.getElementById('commentDisplayName').value;
-            const text = document.getElementById('commentText').value;
+            const displayName = document.getElementById('commentDisplayName').value.trim();
+            const text = document.getElementById('commentText').value.trim();
+
             if (!displayName || !text) {
                 alert('Both display name and comment must be filled out.');
                 return;
             }
+
             db.collection('posts').doc(postId).collection('comments').add({
                 displayName: displayName,
                 text: text,
