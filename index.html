@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Homebase</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="Misc/styles.css">
-    </head>
+<head>
+    <title>Homebase</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="Misc/styles.css">
+</head>
 <body>
-    <div class="header">
-        <h1>Homebase</h1>
-        <a href="https://github.com/SenchouPekora" target="_blank">
-            <img src="Misc/git.png" alt="GitHub">
-        </a>
+<div class="header">
+    <h1>Homebase</h1>
+    <a href="https://github.com/SenchouPekora" target="_blank">
+        <img src="Misc/git.png" alt="GitHub">
+    </a>
+</div>
+<div class="category">
+    <h3>Homebase Posts</h3>
+    <button id="postBtn" class="button">Create a post</button>
+    <div id="postOverlay">
+        <form>
+            <span id="closeBtn" class="close">×</span>
+            <textarea id="postText" placeholder="Write some text..."></textarea>
+            <label for="imageUpload" class="custom-file-upload">Browse</label>
+            <input type="file" id="imageUpload">
+            <button id="submitPost" class="button">Submit Post</button>
+        </form>
     </div>
-    <div class="category">
-        <h3>Homebase Posts</h3>
-        <button id="postBtn" class="button">Create a post</button>
-        <div id="postOverlay">
-            <form>
-                <span id="closeBtn" class="close">×</span>
-                <input type="text" id="displayName" placeholder="Display Name">
-                <textarea id="postText" placeholder="Write some text..."></textarea>
-                <label for="imageUpload" class="custom-file-upload">Browse</label>
-                <input type="file" id="imageUpload">
-                <button id="submitPost" class="button">Submit Post</button>
-            </form>
+    <div id="posts" class="button-row">
+        <!-- Posts will be appended here -->
         </div>
-        <div id="posts" class="button-row">
-            <!-- Posts will be appended here -->
-        </div>
+        <button id="loadMorePosts" class="button">Load All Posts</button>
         <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
+        <script src="script.js"></script>
         <script>
             const firebaseConfig = {
                 apiKey: "AIzaSyDKE6vm_FNpQKZoAzhV0iFYhtBgIQMhPfI",
