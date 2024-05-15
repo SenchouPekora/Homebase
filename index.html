@@ -14,7 +14,7 @@
         </a>
     </div>
     <div id="announcementBanner" class="announcement-banner">
-        <p>Check out our latest updates and features!</p>
+        <p>Welcome to Homebase | 0.0.9b</p>
         <span id="bannerClose" class="close">&times;</span>
     </div>
     <div class="category">
@@ -35,7 +35,6 @@
     <div id="posts" class="button-row">
         <!-- Posts will be appended here -->
         </div>
-        <button id="loadMorePosts" class="button">Load All Posts</button>
         <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
@@ -68,7 +67,6 @@
     
             document.getElementById('submitPost').addEventListener('click', (e) => {
                 e.preventDefault();
-                const displayName = document.getElementById('displayName').value;
                 const postText = document.getElementById('postText').value;
                 const imageFile = document.getElementById('imageUpload').files[0];
     
@@ -91,13 +89,11 @@
                 () => {
                     storage.ref(`images/${postId}`).child('image').getDownloadURL().then(url => {
                         db.collection('posts').doc(postId).set({
-                            displayName: displayName,
                             text: postText,
                             imageUrl: url,
                             timestamp: firebase.firestore.FieldValue.serverTimestamp()
                         }).then(() => {
                             document.getElementById('postOverlay').style.display = 'none';
-                            document.getElementById('displayName').value = '';
                             document.getElementById('postText').value = '';
                             document.getElementById('imageUpload').value = '';
                         }).catch((error) => {
@@ -114,7 +110,6 @@
                     const postElement = document.createElement('div');
                     postElement.classList.add('post');
                     postElement.innerHTML = `
-                        <h2>${post.displayName}</h2>
                         <p>${post.text.substring(0, 20)}...</p>
                         <a href="post.html?id=${doc.id}">
                             <img src="${post.imageUrl}" style="width: 150px; height: auto; object-fit: cover;">
