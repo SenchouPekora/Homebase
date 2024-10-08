@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homebase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="tab-container">
+        <div class="tab active" onclick="openTab(event, 'TVMovies')">TV &amp; Movies</div>
+        <div class="tab" onclick="openTab(event, 'Games')">Games</div>
+        <div class="tab" onclick="openTab(event, 'Artwork')">Artwork</div>
+    </div>
+
+    <div id="TVMovies" class="tab-content active">
+        <div id="series-container"></div>
+    </div>
+    <div id="Games" class="tab-content">
+        <div id="games-container"></div>
+    </div>
+    <div id="Artwork" class="tab-content">
+        <h2>Coming soon.</h2>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
