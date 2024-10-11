@@ -1,10 +1,9 @@
-/* General Styles */
 body {
   background-color: #121212;
   color: #ffffff;
   font-family: 'Montserrat', sans-serif;
   margin: 0;
-  padding-top: 60px; /* Adjust this value based on the height of your tab bar */
+  padding-top: 60px;
 }
 
 /* Tab Container Styles */
@@ -53,7 +52,6 @@ body {
   color: #fff;
 }
 
-/* Tab Content Styles */
 .tab-content {
   display: none;
   padding: 40px 20px;
@@ -63,7 +61,6 @@ body {
   display: block;
 }
 
-/* Category Section Styles */
 .category-section {
   margin: 20px;
 }
@@ -75,7 +72,6 @@ body {
   font-style: italic;
 }
 
-/* Series and Games Container Styles */
 #series-container,
 #games-container {
   padding: 20px;
@@ -105,7 +101,6 @@ body {
   margin-top: 10px;
 }
 
-/* Series Details Styles */
 #series-details {
   text-align: center;
   padding: 20px;
@@ -145,7 +140,6 @@ body {
   background-color: #333333;
 }
 
-/* Game Details Styles */
 #game-details {
   display: flex;
   justify-content: center;
@@ -191,7 +185,6 @@ body {
   background-color: #3700b3;
 }
 
-/* Artwork Post Styles */
 .artwork-post {
   background-color: #1e1e1e;
   border: 1px solid #333;
@@ -204,16 +197,14 @@ body {
   max-width: 600px;
 }
 
-/* Adjust the artwork images */
 .artwork-image {
   width: 100%;
-  max-width: 400px; /* Adjust this value to make images smaller or larger */
+  max-width: 400px;
   border-radius: 10px;
   cursor: pointer;
   height: auto;
 }
 
-/* Download Button Styles */
 .download-button {
   margin-top: 10px;
   background-color: #6200ee;

@@ -1,6 +1,3 @@
-// index.js
-
-// Global variables for Artwork
 let artworkData = {
   all: []
 };
@@ -9,18 +6,16 @@ let artworkPage = 0;
 const artworkPerPage = 20;
 let loadingArtwork = false;
 
-// Fetch data and initialize
 document.addEventListener('DOMContentLoaded', () => {
   fetchMainData();
-  fetchArtworkData(); // Fetch artwork data from the new bin
+  fetchArtworkData();
 });
 
 function fetchMainData() {
-  const jsonBinUrl = 'https://api.jsonbin.io/v3/b/66fcb61aad19ca34f8b1445a/latest'; // Replace with your actual main Bin ID
+  const jsonBinUrl = 'https://api.jsonbin.io/v3/b/66fcb61aad19ca34f8b1445a/latest';
 
   const fetchOptions = {
     headers: {
-      // 'X-Master-Key': 'YOUR_API_KEY' // Include this if your bin is private
     },
     cache: 'no-store'
   };
@@ -34,26 +29,22 @@ function fetchMainData() {
     })
     .then(json => {
       const data = json.record;
-      // Initialize the tabs with data
       loadTVMovies(data.tvMovies);
       loadGames(data.games);
-      // Set the default tab to TV & Movies
       setDefaultTab();
     })
     .catch(error => {
       console.error('Error fetching JSON data:', error);
-      // Handle error for each container
       document.getElementById('series-container').innerHTML = `<p>Sorry, an error occurred while loading the TV & Movies.</p>`;
       document.getElementById('games-container').innerHTML = `<p>Sorry, an error occurred while loading the Games.</p>`;
     });
 }
 
 function fetchArtworkData() {
-  const artworkBinUrl = 'https://api.jsonbin.io/v3/b/670879c8acd3cb34a894d68d/latest'; // Replace with your actual Artwork Bin ID
+  const artworkBinUrl = 'https://api.jsonbin.io/v3/b/670879c8acd3cb34a894d68d/latest';
 
   const fetchOptions = {
     headers: {
-      // 'X-Master-Key': 'YOUR_ARTWORK_API_KEY' // Include this if your artwork bin is private
     },
     cache: 'no-store'
   };
@@ -67,11 +58,8 @@ function fetchArtworkData() {
     })
     .then(json => {
       const data = json.record;
-      // Merge 'safe' and 'other' arrays into a single array
       artworkData.all = [...(data.safe || []), ...(data.other || [])];
-      // Shuffle the artwork data
       shuffledCategoryData = shuffleArray([...artworkData.all]);
-      // Load initial artwork
       loadMoreArtwork();
     })
     .catch(error => {
@@ -80,7 +68,6 @@ function fetchArtworkData() {
     });
 }
 
-// Function to shuffle an array
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -89,21 +76,17 @@ function shuffleArray(array) {
   return array;
 }
 
-// Function to load TV & Movies
 function loadTVMovies(tvMoviesData) {
   const container = document.getElementById('series-container');
   tvMoviesData.forEach((categoryObj, categoryIndex) => {
-    // Create a category section
     const categorySection = document.createElement('div');
     categorySection.classList.add('category-section');
 
-    // Add category title
     const categoryTitle = document.createElement('h2');
     categoryTitle.innerText = categoryObj.category;
     categoryTitle.style.fontStyle = 'italic';
     categorySection.appendChild(categoryTitle);
 
-    // Create a series container within the category
     const seriesContainer = document.createElement('div');
     seriesContainer.classList.add('series-container');
 
@@ -111,7 +94,6 @@ function loadTVMovies(tvMoviesData) {
       const seriesDiv = document.createElement('div');
       seriesDiv.classList.add('series-item');
 
-      // Construct the image URL using Google Drive thumbnail endpoint
       const coverImageUrl = `https://drive.google.com/thumbnail?id=${series.coverImageId}&sz=w300-h450`;
 
       seriesDiv.innerHTML = `
@@ -121,22 +103,18 @@ function loadTVMovies(tvMoviesData) {
       seriesContainer.appendChild(seriesDiv);
     });
 
-    // Add the series container to the category section
     categorySection.appendChild(seriesContainer);
 
-    // Add the category section to the main container
     container.appendChild(categorySection);
   });
 }
 
-// Function to load Games
 function loadGames(gamesData) {
   const container = document.getElementById('games-container');
   gamesData.forEach((game, gameIndex) => {
     const gameDiv = document.createElement('div');
     gameDiv.classList.add('series-item');
 
-    // Construct the image URL using Google Drive thumbnail endpoint
     const coverImageUrl = `https://drive.google.com/thumbnail?id=${game.coverImageId}&sz=w300-h450`;
 
     gameDiv.innerHTML = `
@@ -147,68 +125,56 @@ function loadGames(gamesData) {
   });
 }
 
-// Function to open series.html with appropriate indices
 function openSeries(categoryIndex, seriesIndex) {
   window.location.href = `series.html?category=${categoryIndex}&series=${seriesIndex}`;
 }
 
-// Function to open game.html with appropriate index
 function openGame(gameIndex) {
   window.location.href = `game.html?game=${gameIndex}`;
 }
 
-// Function to handle tab switching
 function openTab(evt, tabName) {
   var i, tabcontent, tabs;
 
-  // Hide all tab contents
   tabcontent = document.getElementsByClassName("tab-content");
   for (i = 0; i < tabcontent.length; i++) {
     tabcontent[i].classList.remove("active");
     tabcontent[i].style.display = "none";
   }
 
-  // Remove "active" class from all tabs
   tabs = document.getElementsByClassName("tab");
   for (i = 0; i < tabs.length; i++) {
     tabs[i].classList.remove("active");
   }
 
-  // Show the selected tab content and add "active" class to the clicked tab
   document.getElementById(tabName).classList.add("active");
   document.getElementById(tabName).style.display = "block";
   if (evt && evt.currentTarget) {
     evt.currentTarget.classList.add("active");
   }
 
-  // If Artwork tab is selected and artwork hasn't been loaded yet
   if (tabName === 'Artwork' && artworkPage === 0) {
     loadMoreArtwork();
   }
 }
 
-// Function to set the default tab to TV & Movies on page load
 function setDefaultTab() {
-  // Remove active class from all tabs
   const tabs = document.getElementsByClassName('tab');
   for (let i = 0; i < tabs.length; i++) {
     tabs[i].classList.remove('active');
   }
 
-  // Add active class to the TV & Movies tab
   const defaultTab = document.getElementById('tv-movies-tab');
   if (defaultTab) {
     defaultTab.classList.add('active');
   }
 
-  // Hide all tab contents
   const tabContents = document.getElementsByClassName('tab-content');
   for (let i = 0; i < tabContents.length; i++) {
     tabContents[i].classList.remove('active');
     tabContents[i].style.display = 'none';
   }
 
-  // Show the TV & Movies content
   const tvMoviesContent = document.getElementById('TVMovies');
   if (tvMoviesContent) {
     tvMoviesContent.classList.add('active');
@@ -216,7 +182,6 @@ function setDefaultTab() {
   }
 }
 
-// Function to load more artwork
 function loadMoreArtwork() {
   if (loadingArtwork) return;
   loadingArtwork = true;
@@ -227,7 +192,6 @@ function loadMoreArtwork() {
   const endIndex = startIndex + artworkPerPage;
   const artworksToLoad = shuffledCategoryData.slice(startIndex, endIndex);
 
-  // Check if there are images to load
   if (artworksToLoad.length === 0) {
     if (artworkPage === 0) {
       container.innerHTML = `<p>No images available.</p>`;
@@ -241,11 +205,10 @@ function loadMoreArtwork() {
     postDiv.classList.add('artwork-post');
 
     const img = document.createElement('img');
-    img.src = `https://drive.google.com/thumbnail?id=${imageId}&sz=w600-h600`; // Adjusted size
+    img.src = `https://drive.google.com/thumbnail?id=${imageId}&sz=w600-h600`;
     img.alt = 'Artwork Image';
     img.classList.add('artwork-image');
 
-    // Open the full-resolution image in a new tab when clicked
     img.onclick = () => {
       const fullResUrl = `https://drive.google.com/uc?id=${imageId}`;
       window.open(fullResUrl, '_blank');
@@ -265,7 +228,6 @@ function loadMoreArtwork() {
   loadingArtwork = false;
 }
 
-// Function to handle infinite scrolling
 window.addEventListener('scroll', () => {
   const artworkTab = document.getElementById('Artwork');
   if (artworkTab && artworkTab.classList.contains('active')) {
@@ -279,7 +241,6 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// Function to download image
 function downloadImage(imageId) {
   const downloadUrl = `https://drive.google.com/uc?export=download&id=${imageId}`;
   window.location.href = downloadUrl;

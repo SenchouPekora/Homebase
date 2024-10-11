@@ -1,37 +1,29 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Your Site Title</title>
-    <!-- Include your font and CSS -->
+    <title>Homebase</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <!-- Include any other required meta tags -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <!-- Tabbed Interface -->
     <div class="tab-container">
         <div class="tab" onclick="openTab(event, 'TVMovies')" id="tv-movies-tab">TV &amp; Movies</div>
         <div class="tab" onclick="openTab(event, 'Games')" id="games-tab">Games</div>
         <div class="tab" onclick="openTab(event, 'Artwork')" id="artwork-tab">Artwork</div>
     </div>
     
-    <!-- Tab Contents -->
     <div id="TVMovies" class="tab-content">
-        <!-- Container for TV & Movies content -->
         <div id="series-container"></div>
     </div>
     <div id="Games" class="tab-content">
-        <!-- Container for Games content -->
         <div id="games-container"></div>
     </div>
     <div id="Artwork" class="tab-content">
-        <!-- Sidebar for Safe and Other options -->
         <div id="artwork-container"></div>
     </div>
 
-    <!-- Include your JavaScript files -->
     <script src="index.js"></script>
 </body>
 </html>
