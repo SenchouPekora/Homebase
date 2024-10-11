@@ -207,7 +207,7 @@ body {
 /* Adjust the artwork images */
 .artwork-image {
   width: 100%;
-  max-width: 400px; /* Decrease this value to make images smaller */
+  max-width: 400px; /* Adjust this value to make images smaller or larger */
   border-radius: 10px;
   cursor: pointer;
   height: auto;
@@ -227,80 +227,4 @@ body {
 
 .download-button:hover {
   background-color: #3700b3;
-}
-
-/* Popup Styles */
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  overflow-y: auto; /* Enable scrolling if content is tall */
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.popup-content {
-  position: relative;
-  background-color: #121212;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 90%;
-  max-height: 90%;
-  margin-top: 50px; /* Add margin to center vertically */
-  text-align: center;
-}
-
-.popup-content img {
-  width: auto;
-  max-width: 100%;
-  height: auto;
-  max-height: 80vh; /* Limit image height to viewport height */
-}
-
-.popup-download-button {
-  margin-top: 10px;
-  background-color: #6200ee;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.popup-download-button:hover {
-  background-color: #3700b3;
-}
-
-/* Close instruction text */
-.popup-close-text {
-  margin: 20px;
-  color: #bbb;
-  font-size: 0.9em;
-  text-align: center;
-}
-
-/* Responsive Styles */
-@media screen and (max-width: 768px) {
-  /* Adjust game content layout on smaller screens */
-  .game-content {
-    flex-direction: column;
-  }
-
-  #game-cover {
-    margin-right: 0;
-    margin-bottom: 20px;
-  }
-
-  .popup-content {
-    margin-top: 30px;
-  }
-
-  .popup-content img {
-    max-height: 60vh;
-  }
 }

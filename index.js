@@ -2,18 +2,18 @@
 
 // Global variables for Artwork
 let artworkData = {
-  safe: [],
-  other: []
+  all: []
 };
-let currentCategory = 'safe';
 let shuffledCategoryData = [];
 let artworkPage = 0;
 const artworkPerPage = 20;
 let loadingArtwork = false;
 
 // Fetch data and initialize
-fetchMainData();
-fetchArtworkData(); // Fetch artwork data from the new bin
+document.addEventListener('DOMContentLoaded', () => {
+  fetchMainData();
+  fetchArtworkData(); // Fetch artwork data from the new bin
+});
 
 function fetchMainData() {
   const jsonBinUrl = 'https://api.jsonbin.io/v3/b/66fcb61aad19ca34f8b1445a/latest'; // Replace with your actual main Bin ID
@@ -79,7 +79,6 @@ function fetchArtworkData() {
       document.getElementById('artwork-container').innerHTML = `<p>Sorry, an error occurred while loading the Artwork.</p>`;
     });
 }
-
 
 // Function to shuffle an array
 function shuffleArray(array) {
@@ -182,7 +181,7 @@ function openTab(evt, tabName) {
     evt.currentTarget.classList.add("active");
   }
 
-  // If Artwork tab is selected, load the artwork if not already loaded
+  // If Artwork tab is selected and artwork hasn't been loaded yet
   if (tabName === 'Artwork' && artworkPage === 0) {
     loadMoreArtwork();
   }
@@ -217,22 +216,7 @@ function setDefaultTab() {
   }
 }
 
-// Function to switch between Safe and Other categories
-function switchCategory(category) {
-  if (currentCategory === category) return;
-  currentCategory = category;
-  artworkPage = 0;
-  shuffledCategoryData = []; // Reset shuffled data
-  document.getElementById('artwork-container').innerHTML = '';
-  // Update button styles
-  document.getElementById('safe-button').classList.toggle('active', category === 'safe');
-  document.getElementById('other-button').classList.toggle('active', category === 'other');
-  // Shuffle the category data
-  shuffledCategoryData = shuffleArray([...artworkData[currentCategory]]);
-  // Load artwork for the new category
-  loadMoreArtwork();
-}
-
+// Function to load more artwork
 function loadMoreArtwork() {
   if (loadingArtwork) return;
   loadingArtwork = true;
@@ -257,10 +241,15 @@ function loadMoreArtwork() {
     postDiv.classList.add('artwork-post');
 
     const img = document.createElement('img');
-    img.src = `https://drive.google.com/thumbnail?id=${imageId}&sz=w600-h600`;
+    img.src = `https://drive.google.com/thumbnail?id=${imageId}&sz=w600-h600`; // Adjusted size
     img.alt = 'Artwork Image';
     img.classList.add('artwork-image');
-    img.onclick = () => openImagePopup(imageId);
+
+    // Open the full-resolution image in a new tab when clicked
+    img.onclick = () => {
+      const fullResUrl = `https://drive.google.com/uc?id=${imageId}`;
+      window.open(fullResUrl, '_blank');
+    };
 
     const downloadButton = document.createElement('button');
     downloadButton.classList.add('download-button');
@@ -276,11 +265,10 @@ function loadMoreArtwork() {
   loadingArtwork = false;
 }
 
-
 // Function to handle infinite scrolling
 window.addEventListener('scroll', () => {
   const artworkTab = document.getElementById('Artwork');
-  if (artworkTab.classList.contains('active')) {
+  if (artworkTab && artworkTab.classList.contains('active')) {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const windowHeight = window.innerHeight || document.documentElement.clientHeight;
     const documentHeight = document.documentElement.scrollHeight;
@@ -290,42 +278,6 @@ window.addEventListener('scroll', () => {
     }
   }
 });
-
-// Function to open image popup
-function openImagePopup(imageId) {
-  const popupOverlay = document.createElement('div');
-  popupOverlay.classList.add('popup-overlay');
-  // Close the popup when clicking outside the content
-  popupOverlay.onclick = () => document.body.removeChild(popupOverlay);
-
-  const popupContent = document.createElement('div');
-  popupContent.classList.add('popup-content');
-  // Prevent closing when clicking inside the content
-  popupContent.onclick = (event) => event.stopPropagation();
-
-  const iframe = document.createElement('iframe');
-  iframe.src = `https://drive.google.com/file/d/${imageId}/preview`;
-  iframe.allowFullscreen = true;
-
-  // Add download button
-  const downloadButton = document.createElement('button');
-  downloadButton.classList.add('popup-download-button');
-  downloadButton.innerText = 'Download';
-  downloadButton.onclick = () => downloadImage(imageId);
-
-  popupContent.appendChild(iframe);
-  popupContent.appendChild(downloadButton);
-
-  popupOverlay.appendChild(popupContent);
-
-  // Add close instruction text outside the popup content
-  const closeText = document.createElement('p');
-  closeText.classList.add('popup-close-text');
-  closeText.innerText = 'Click out here to close.';
-  popupOverlay.appendChild(closeText);
-
-  document.body.appendChild(popupOverlay);
-}
 
 // Function to download image
 function downloadImage(imageId) {
