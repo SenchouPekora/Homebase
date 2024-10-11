@@ -163,8 +163,8 @@ function openTab(evt, tabName) {
   // Hide all tab contents
   tabcontent = document.getElementsByClassName("tab-content");
   for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
     tabcontent[i].classList.remove("active");
+    tabcontent[i].style.display = "none";
   }
 
   // Remove "active" class from all tabs
@@ -174,9 +174,9 @@ function openTab(evt, tabName) {
   }
 
   // Show the selected tab content and add "active" class to the clicked tab
-  document.getElementById(tabName).style.display = "block";
   document.getElementById(tabName).classList.add("active");
-  if (evt) {
+  document.getElementById(tabName).style.display = "block";
+  if (evt && evt.currentTarget) {
     evt.currentTarget.classList.add("active");
   }
 
@@ -188,13 +188,30 @@ function openTab(evt, tabName) {
 
 // Function to set the default tab to TV & Movies on page load
 function setDefaultTab() {
-  // Simulate a click on the TV & Movies tab
-  const defaultTab = document.querySelector('.tab[data-tab="TVMovies"]');
+  // Remove active class from all tabs
+  const tabs = document.getElementsByClassName('tab');
+  for (let i = 0; i < tabs.length; i++) {
+    tabs[i].classList.remove('active');
+  }
+
+  // Add active class to the TV & Movies tab
+  const defaultTab = document.getElementById('tv-movies-tab');
   if (defaultTab) {
-    defaultTab.click();
-  } else {
-    // Fallback if data-tab attribute is not set
-    openTab(null, 'TVMovies');
+    defaultTab.classList.add('active');
+  }
+
+  // Hide all tab contents
+  const tabContents = document.getElementsByClassName('tab-content');
+  for (let i = 0; i < tabContents.length; i++) {
+    tabContents[i].classList.remove('active');
+    tabContents[i].style.display = 'none';
+  }
+
+  // Show the TV & Movies content
+  const tvMoviesContent = document.getElementById('TVMovies');
+  if (tvMoviesContent) {
+    tvMoviesContent.classList.add('active');
+    tvMoviesContent.style.display = 'block';
   }
 }
 

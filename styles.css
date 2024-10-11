@@ -1,3 +1,4 @@
+/* General Styles */
 body {
   background-color: #121212;
   color: #ffffff;
@@ -6,12 +7,14 @@ body {
   padding: 0;
 }
 
+/* Tab Container Styles */
 .tab-container {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
 
+/* Tab Styles */
 .tab {
   padding: 12px 24px;
   cursor: pointer;
@@ -46,6 +49,7 @@ body {
   color: #fff;
 }
 
+/* Tab Content Styles */
 .tab-content {
   display: none;
   padding: 40px 20px;
@@ -55,6 +59,7 @@ body {
   display: block;
 }
 
+/* Category Section Styles */
 .category-section {
   margin: 20px;
 }
@@ -66,6 +71,7 @@ body {
   font-style: italic;
 }
 
+/* Series and Games Container Styles */
 #series-container,
 #games-container {
   padding: 20px;
@@ -95,6 +101,7 @@ body {
   margin-top: 10px;
 }
 
+/* Series Details Styles */
 #series-details {
   text-align: center;
   padding: 20px;
@@ -115,6 +122,7 @@ body {
   }
 }
 
+/* Episode List Styles */
 #episode-list button {
   background-color: #1f1f1f;
   color: #ffffff;
@@ -133,6 +141,7 @@ body {
   background-color: #333333;
 }
 
+/* Game Details Styles */
 #game-details {
   display: flex;
   justify-content: center;
@@ -143,6 +152,8 @@ body {
 .game-content {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 #game-cover {
@@ -175,6 +186,41 @@ body {
 #download-button:hover {
   background-color: #3700b3;
 }
+
+/* Artwork Tab Styles */
+.artwork-sidebar {
+  position: fixed;
+  top: 100px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.artwork-category-button {
+  background-color: #1e1e1e;
+  color: #bbb;
+  border: 1px solid #333;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.artwork-category-button.active {
+  background-color: #6200ee;
+  color: #fff;
+}
+
+.artwork-category-button:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+#artwork-container {
+  margin-left: 200px; /* Adjust based on sidebar width */
+  padding: 20px;
+}
+
 /* Adjust the artwork post container */
 .artwork-post {
   background-color: #1e1e1e;
@@ -195,6 +241,22 @@ body {
   border-radius: 10px;
   cursor: pointer;
   height: auto;
+}
+
+/* Download Button Styles */
+.download-button {
+  margin-top: 10px;
+  background-color: #6200ee;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.download-button:hover {
+  background-color: #3700b3;
 }
 
 /* Popup Styles */
@@ -267,5 +329,15 @@ body {
   .popup-content iframe {
     width: 100%;
     height: auto;
+  }
+
+  /* Adjust game content layout on smaller screens */
+  .game-content {
+    flex-direction: column;
+  }
+
+  #game-cover {
+    margin-right: 0;
+    margin-bottom: 20px;
   }
 }
