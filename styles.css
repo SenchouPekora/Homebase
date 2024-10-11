@@ -175,69 +175,26 @@ body {
 #download-button:hover {
   background-color: #3700b3;
 }
-.artwork-sidebar {
-  position: fixed;
-  top: 100px;
-  left: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.artwork-category-button {
-  background-color: #1e1e1e;
-  color: #bbb;
-  border: 1px solid #333;
-  padding: 10px 20px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.artwork-category-button.active {
-  background-color: #6200ee;
-  color: #fff;
-}
-
-.artwork-category-button:hover {
-  background-color: #333;
-  color: #fff;
-}
-
-#artwork-container {
-  margin-left: 200px; /* Adjust based on sidebar width */
-  padding: 20px;
-}
-
+/* Adjust the artwork post container */
 .artwork-post {
   background-color: #1e1e1e;
   border: 1px solid #333;
   border-radius: 10px;
   padding: 15px;
-  margin-bottom: 20px;
+  margin: 20px auto; /* Center the posts */
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 600px; /* Limit the width */
 }
 
+/* Adjust the artwork images */
 .artwork-image {
   width: 100%;
+  max-width: 600px; /* Ensure images don't exceed the container */
   border-radius: 10px;
   cursor: pointer;
-}
-
-.download-button {
-  margin-top: 10px;
-  background-color: #6200ee;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  width: 100%;
-}
-
-.download-button:hover {
-  background-color: #3700b3;
+  height: auto;
 }
 
 /* Popup Styles */
@@ -248,10 +205,11 @@ body {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow-y: auto; /* Enable scrolling if content is tall */
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .popup-content {
@@ -260,8 +218,7 @@ body {
   padding: 20px;
   border-radius: 10px;
   max-width: 90%;
-  max-height: 90%;
-  overflow: auto;
+  margin-top: 50px; /* Add margin to center vertically */
   text-align: center;
 }
 
@@ -288,9 +245,10 @@ body {
 
 /* Close instruction text */
 .popup-close-text {
-  margin-top: 10px;
+  margin: 20px;
   color: #bbb;
   font-size: 0.9em;
+  text-align: center;
 }
 
 /* Responsive Styles */

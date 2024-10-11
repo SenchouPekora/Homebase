@@ -37,6 +37,8 @@ function fetchMainData() {
       // Initialize the tabs with data
       loadTVMovies(data.tvMovies);
       loadGames(data.games);
+      // Set the default tab to TV & Movies
+      setDefaultTab();
     })
     .catch(error => {
       console.error('Error fetching JSON data:', error);
@@ -69,8 +71,7 @@ function fetchArtworkData() {
       artworkData.other = data.other || [];
       // Shuffle the data for the initial category
       shuffledCategoryData = shuffleArray([...artworkData[currentCategory]]);
-      // Load initial artwork
-      loadMoreArtwork();
+      // Note: Do not automatically load artwork here to avoid switching tabs
     })
     .catch(error => {
       console.error('Error fetching artwork data:', error);
@@ -175,7 +176,26 @@ function openTab(evt, tabName) {
   // Show the selected tab content and add "active" class to the clicked tab
   document.getElementById(tabName).style.display = "block";
   document.getElementById(tabName).classList.add("active");
-  evt.currentTarget.classList.add("active");
+  if (evt) {
+    evt.currentTarget.classList.add("active");
+  }
+
+  // If Artwork tab is selected, load the artwork if not already loaded
+  if (tabName === 'Artwork' && artworkPage === 0) {
+    loadMoreArtwork();
+  }
+}
+
+// Function to set the default tab to TV & Movies on page load
+function setDefaultTab() {
+  // Simulate a click on the TV & Movies tab
+  const defaultTab = document.querySelector('.tab[data-tab="TVMovies"]');
+  if (defaultTab) {
+    defaultTab.click();
+  } else {
+    // Fallback if data-tab attribute is not set
+    openTab(null, 'TVMovies');
+  }
 }
 
 // Function to switch between Safe and Other categories
@@ -219,7 +239,7 @@ function loadMoreArtwork() {
     postDiv.classList.add('artwork-post');
 
     const img = document.createElement('img');
-    img.src = `https://drive.google.com/thumbnail?id=${imageId}&sz=w600-h400`;
+    img.src = `https://drive.google.com/thumbnail?id=${imageId}&sz=w600-h600`; // Adjusted size
     img.alt = 'Artwork Image';
     img.classList.add('artwork-image');
     img.onclick = () => openImagePopup(imageId);
@@ -274,16 +294,17 @@ function openImagePopup(imageId) {
   downloadButton.innerText = 'Download';
   downloadButton.onclick = () => downloadImage(imageId);
 
-  // Add close instruction text
-  const closeText = document.createElement('p');
-  closeText.classList.add('popup-close-text');
-  closeText.innerText = 'Click outside to close.';
-
   popupContent.appendChild(iframe);
   popupContent.appendChild(downloadButton);
-  popupContent.appendChild(closeText);
 
   popupOverlay.appendChild(popupContent);
+
+  // Add close instruction text outside the popup content
+  const closeText = document.createElement('p');
+  closeText.classList.add('popup-close-text');
+  closeText.innerText = 'Click out here to close.';
+  popupOverlay.appendChild(closeText);
+
   document.body.appendChild(popupOverlay);
 }
 
