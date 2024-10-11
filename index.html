@@ -1,29 +1,42 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Homebase</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <title>Your Site Title</title>
+    <!-- Include your font and CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- Include any other required meta tags -->
 </head>
 <body>
+    <!-- Tabbed Interface -->
     <div class="tab-container">
-        <div class="tab active" onclick="openTab(event, 'TVMovies')">TV &amp; Movies</div>
+        <div class="tab" onclick="openTab(event, 'TVMovies')">TV &amp; Movies</div>
         <div class="tab" onclick="openTab(event, 'Games')">Games</div>
-        <div class="tab" onclick="openTab(event, 'Artwork')">Artwork</div>
+        <div class="tab active" onclick="openTab(event, 'Artwork')">Artwork</div>
     </div>
 
-    <div id="TVMovies" class="tab-content active">
+    <!-- Tab Contents -->
+    <div id="TVMovies" class="tab-content">
+        <!-- Container for TV & Movies content -->
         <div id="series-container"></div>
     </div>
     <div id="Games" class="tab-content">
+        <!-- Container for Games content -->
         <div id="games-container"></div>
     </div>
-    <div id="Artwork" class="tab-content">
-        <h2>Coming soon.</h2>
+    <div id="Artwork" class="tab-content active">
+        <!-- Sidebar for Safe and Other options -->
+        <div class="artwork-sidebar">
+            <button id="safe-button" class="artwork-category-button active" onclick="switchCategory('safe')">Safe</button>
+            <button id="other-button" class="artwork-category-button" onclick="switchCategory('other')">Other</button>
+        </div>
+        <!-- Container for Artwork content -->
+        <div id="artwork-container"></div>
     </div>
 
+    <!-- Include your JavaScript files -->
     <script src="index.js"></script>
 </body>
 </html>

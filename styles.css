@@ -175,3 +175,131 @@ body {
 #download-button:hover {
   background-color: #3700b3;
 }
+.artwork-sidebar {
+  position: fixed;
+  top: 100px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.artwork-category-button {
+  background-color: #1e1e1e;
+  color: #bbb;
+  border: 1px solid #333;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.artwork-category-button.active {
+  background-color: #6200ee;
+  color: #fff;
+}
+
+.artwork-category-button:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+#artwork-container {
+  margin-left: 200px; /* Adjust based on sidebar width */
+  padding: 20px;
+}
+
+.artwork-post {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.artwork-image {
+  width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.download-button {
+  margin-top: 10px;
+  background-color: #6200ee;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.download-button:hover {
+  background-color: #3700b3;
+}
+
+/* Popup Styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  position: relative;
+  background-color: #121212;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.popup-content iframe {
+  width: 800px;
+  height: 600px;
+  border: none;
+}
+
+.close-button {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background-color: #6200ee;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  background-color: #3700b3;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .artwork-sidebar {
+    position: static;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  #artwork-container {
+    margin-left: 0;
+  }
+
+  .popup-content iframe {
+    width: 100%;
+    height: 400px;
+  }
+}
