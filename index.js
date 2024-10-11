@@ -16,7 +16,7 @@ fetchMainData();
 fetchArtworkData(); // Fetch artwork data from the new bin
 
 function fetchMainData() {
-  const jsonBinUrl = 'https://api.jsonbin.io/v3/b/YOUR_MAIN_BIN_ID/latest'; // Replace with your actual main Bin ID
+  const jsonBinUrl = 'https://api.jsonbin.io/v3/b/66fcb61aad19ca34f8b1445a/latest'; // Replace with your actual main Bin ID
 
   const fetchOptions = {
     headers: {
@@ -47,7 +47,7 @@ function fetchMainData() {
 }
 
 function fetchArtworkData() {
-  const artworkBinUrl = 'https://api.jsonbin.io/v3/b/YOUR_ARTWORK_BIN_ID/latest'; // Replace with your actual Artwork Bin ID
+  const artworkBinUrl = 'https://api.jsonbin.io/v3/b/670879c8acd3cb34a894d68d/latest'; // Replace with your actual Artwork Bin ID
 
   const fetchOptions = {
     headers: {
