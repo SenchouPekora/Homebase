@@ -67,17 +67,19 @@ function fetchArtworkData() {
     })
     .then(json => {
       const data = json.record;
-      artworkData.safe = data.safe || [];
-      artworkData.other = data.other || [];
-      // Shuffle the data for the initial category
-      shuffledCategoryData = shuffleArray([...artworkData[currentCategory]]);
-      // Note: Do not automatically load artwork here to avoid switching tabs
+      // Merge 'safe' and 'other' arrays into a single array
+      artworkData.all = [...(data.safe || []), ...(data.other || [])];
+      // Shuffle the artwork data
+      shuffledCategoryData = shuffleArray([...artworkData.all]);
+      // Load initial artwork
+      loadMoreArtwork();
     })
     .catch(error => {
       console.error('Error fetching artwork data:', error);
       document.getElementById('artwork-container').innerHTML = `<p>Sorry, an error occurred while loading the Artwork.</p>`;
     });
 }
+
 
 // Function to shuffle an array
 function shuffleArray(array) {
@@ -231,7 +233,6 @@ function switchCategory(category) {
   loadMoreArtwork();
 }
 
-// Function to load more artwork
 function loadMoreArtwork() {
   if (loadingArtwork) return;
   loadingArtwork = true;
@@ -245,7 +246,7 @@ function loadMoreArtwork() {
   // Check if there are images to load
   if (artworksToLoad.length === 0) {
     if (artworkPage === 0) {
-      container.innerHTML = `<p>No images available in this category.</p>`;
+      container.innerHTML = `<p>No images available.</p>`;
     }
     loadingArtwork = false;
     return;
@@ -256,7 +257,7 @@ function loadMoreArtwork() {
     postDiv.classList.add('artwork-post');
 
     const img = document.createElement('img');
-    img.src = `https://drive.google.com/thumbnail?id=${imageId}&sz=w600-h600`; // Adjusted size
+    img.src = `https://drive.google.com/thumbnail?id=${imageId}&sz=w600-h600`;
     img.alt = 'Artwork Image';
     img.classList.add('artwork-image');
     img.onclick = () => openImagePopup(imageId);
@@ -274,6 +275,7 @@ function loadMoreArtwork() {
   artworkPage++;
   loadingArtwork = false;
 }
+
 
 // Function to handle infinite scrolling
 window.addEventListener('scroll', () => {

@@ -4,17 +4,21 @@ body {
   color: #ffffff;
   font-family: 'Montserrat', sans-serif;
   margin: 0;
-  padding: 0;
+  padding-top: 60px; /* Adjust this value based on the height of your tab bar */
 }
 
 /* Tab Container Styles */
 .tab-container {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #121212;
+  z-index: 1000;
+  border-bottom: 1px solid #333;
 }
 
-/* Tab Styles */
 .tab {
   padding: 12px 24px;
   cursor: pointer;
@@ -187,57 +191,23 @@ body {
   background-color: #3700b3;
 }
 
-/* Artwork Tab Styles */
-.artwork-sidebar {
-  position: fixed;
-  top: 100px;
-  left: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.artwork-category-button {
-  background-color: #1e1e1e;
-  color: #bbb;
-  border: 1px solid #333;
-  padding: 10px 20px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.artwork-category-button.active {
-  background-color: #6200ee;
-  color: #fff;
-}
-
-.artwork-category-button:hover {
-  background-color: #333;
-  color: #fff;
-}
-
-#artwork-container {
-  margin-left: 200px; /* Adjust based on sidebar width */
-  padding: 20px;
-}
-
-/* Adjust the artwork post container */
+/* Artwork Post Styles */
 .artwork-post {
   background-color: #1e1e1e;
   border: 1px solid #333;
   border-radius: 10px;
   padding: 15px;
-  margin: 20px auto; /* Center the posts */
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 600px; /* Limit the width */
+  max-width: 600px;
 }
 
 /* Adjust the artwork images */
 .artwork-image {
   width: 100%;
-  max-width: 600px; /* Ensure images don't exceed the container */
+  max-width: 400px; /* Decrease this value to make images smaller */
   border-radius: 10px;
   cursor: pointer;
   height: auto;
@@ -280,15 +250,16 @@ body {
   padding: 20px;
   border-radius: 10px;
   max-width: 90%;
+  max-height: 90%;
   margin-top: 50px; /* Add margin to center vertically */
   text-align: center;
 }
 
-.popup-content iframe {
-  width: 100%;
-  max-width: 800px;
+.popup-content img {
+  width: auto;
+  max-width: 100%;
   height: auto;
-  border: none;
+  max-height: 80vh; /* Limit image height to viewport height */
 }
 
 .popup-download-button {
@@ -315,22 +286,6 @@ body {
 
 /* Responsive Styles */
 @media screen and (max-width: 768px) {
-  .artwork-sidebar {
-    position: static;
-    flex-direction: row;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-
-  #artwork-container {
-    margin-left: 0;
-  }
-
-  .popup-content iframe {
-    width: 100%;
-    height: auto;
-  }
-
   /* Adjust game content layout on smaller screens */
   .game-content {
     flex-direction: column;
@@ -339,5 +294,13 @@ body {
   #game-cover {
     margin-right: 0;
     margin-bottom: 20px;
+  }
+
+  .popup-content {
+    margin-top: 30px;
+  }
+
+  .popup-content img {
+    max-height: 60vh;
   }
 }
