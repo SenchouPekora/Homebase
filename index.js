@@ -51,7 +51,7 @@ function fetchArtworkData() {
       return response.json();
     })
     .then(data => {
-      artworkData.all = data.artwork || [];
+      artworkData.all = data || [];
       shuffledCategoryData = shuffleArray([...artworkData.all]);
       loadMoreArtwork();
     })
