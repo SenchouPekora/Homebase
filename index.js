@@ -41,17 +41,24 @@ function fetchMainData() {
 }
 
 function fetchArtworkData() {
-  const artworkJsonUrl = 'https://gist.githubusercontent.com/SenchouPekora/f28e49c8d344a6b412a6186bb36f3c90/raw/e3def6e88e899092ea3dab3fd7fb7a6ae00303db/artwork.json';
+  const artworkBinUrl = 'https://api.jsonbin.io/v3/b/670879c8acd3cb34a894d68d/latest';
 
-  fetch(artworkJsonUrl)
+  const fetchOptions = {
+    headers: {
+    },
+    cache: 'no-store'
+  };
+
+  fetch(artworkBinUrl, fetchOptions)
     .then(response => {
       if (!response.ok) {
         throw new Error(`Artwork data fetch failed. Status: ${response.status}`);
       }
       return response.json();
     })
-    .then(data => {
-      artworkData.all = data || [];
+    .then(json => {
+      const data = json.record;
+      artworkData.all = [...(data.safe || []), ...(data.other || [])];
       shuffledCategoryData = shuffleArray([...artworkData.all]);
       loadMoreArtwork();
     })
