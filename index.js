@@ -41,23 +41,16 @@ function fetchMainData() {
 }
 
 function fetchArtworkData() {
-  const artworkBinUrl = 'https://api.jsonbin.io/v3/b/670879c8acd3cb34a894d68d/latest';
+  const artworkJsonUrl = 'artwork.json';
 
-  const fetchOptions = {
-    headers: {
-    },
-    cache: 'no-store'
-  };
-
-  fetch(artworkBinUrl, fetchOptions)
+  fetch(artworkJsonUrl)
     .then(response => {
       if (!response.ok) {
         throw new Error(`Artwork data fetch failed. Status: ${response.status}`);
       }
       return response.json();
     })
-    .then(json => {
-      const data = json.record;
+    .then(data => {
       artworkData.all = [...(data.safe || []), ...(data.other || [])];
       shuffledCategoryData = shuffleArray([...artworkData.all]);
       loadMoreArtwork();
