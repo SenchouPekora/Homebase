@@ -219,19 +219,3 @@ body {
 .download-button:hover {
   background-color: #3700b3;
 }
-.homepage-content {
-  text-align: center;
-  margin-top: 100px;
-  color: #ffffff;
-}
-
-.homepage-content h1 {
-  font-size: 2.5em;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.homepage-content p {
-  font-size: 1.2em;
-  margin: 10px 0;
-}

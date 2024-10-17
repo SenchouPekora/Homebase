@@ -9,14 +9,14 @@ let loadingArtwork = false;
 document.addEventListener('DOMContentLoaded', () => {
   fetchMainData();
   fetchArtworkData();
-  setDefaultTab();
 });
 
 function fetchMainData() {
   const jsonBinUrl = 'https://api.jsonbin.io/v3/b/66fcb61aad19ca34f8b1445a/latest';
 
   const fetchOptions = {
-    headers: {},
+    headers: {
+    },
     cache: 'no-store'
   };
 
@@ -31,6 +31,7 @@ function fetchMainData() {
       const data = json.record;
       loadTVMovies(data.tvMovies);
       loadGames(data.games);
+      setDefaultTab();
     })
     .catch(error => {
       console.error('Error fetching JSON data:', error);
@@ -52,6 +53,7 @@ function fetchArtworkData() {
     .then(data => {
       artworkData.all = [...(data.safe || []), ...(data.other || [])];
       shuffledCategoryData = shuffleArray([...artworkData.all]);
+      loadMoreArtwork();
     })
     .catch(error => {
       console.error('Error fetching artwork data:', error);
@@ -82,19 +84,20 @@ function loadTVMovies(tvMoviesData) {
     seriesContainer.classList.add('series-container');
 
     categoryObj.series.forEach((series, seriesIndex) => {
-      const seriesItem = document.createElement('div');
-      seriesItem.classList.add('series-item');
+      const seriesDiv = document.createElement('div');
+      seriesDiv.classList.add('series-item');
 
       const coverImageUrl = `https://drive.google.com/thumbnail?id=${series.coverImageId}&sz=w300-h450`;
 
-      seriesItem.innerHTML = `
+      seriesDiv.innerHTML = `
         <img src="${coverImageUrl}" alt="${series.title}" onclick="openSeries(${categoryIndex}, ${seriesIndex})">
         <h3>${series.title}</h3>
       `;
-      seriesContainer.appendChild(seriesItem);
+      seriesContainer.appendChild(seriesDiv);
     });
 
     categorySection.appendChild(seriesContainer);
+
     container.appendChild(categorySection);
   });
 }
@@ -102,16 +105,16 @@ function loadTVMovies(tvMoviesData) {
 function loadGames(gamesData) {
   const container = document.getElementById('games-container');
   gamesData.forEach((game, gameIndex) => {
-    const gameItem = document.createElement('div');
-    gameItem.classList.add('series-item');
+    const gameDiv = document.createElement('div');
+    gameDiv.classList.add('series-item');
 
     const coverImageUrl = `https://drive.google.com/thumbnail?id=${game.coverImageId}&sz=w300-h450`;
 
-    gameItem.innerHTML = `
+    gameDiv.innerHTML = `
       <img src="${coverImageUrl}" alt="${game.title}" onclick="openGame(${gameIndex})">
       <h3>${game.title}</h3>
     `;
-    container.appendChild(gameItem);
+    container.appendChild(gameDiv);
   });
 }
 
@@ -126,29 +129,21 @@ function openGame(gameIndex) {
 function openTab(evt, tabName) {
   var i, tabcontent, tabs;
 
-  tabcontent = document.getElementsByClassName('tab-content');
+  tabcontent = document.getElementsByClassName("tab-content");
   for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = 'none';
-    tabcontent[i].classList.remove('active');
+    tabcontent[i].classList.remove("active");
+    tabcontent[i].style.display = "none";
   }
 
-  tabs = document.getElementsByClassName('tab');
+  tabs = document.getElementsByClassName("tab");
   for (i = 0; i < tabs.length; i++) {
-    tabs[i].classList.remove('active');
+    tabs[i].classList.remove("active");
   }
 
-  var homepage = document.getElementById('homepage');
-  if (homepage) {
-    homepage.style.display = 'none';
-  }
-
-  var tabContentElement = document.getElementById(tabName);
-  if (tabContentElement) {
-    tabContentElement.style.display = 'block';
-    tabContentElement.classList.add('active');
-  }
+  document.getElementById(tabName).classList.add("active");
+  document.getElementById(tabName).style.display = "block";
   if (evt && evt.currentTarget) {
-    evt.currentTarget.classList.add('active');
+    evt.currentTarget.classList.add("active");
   }
 
   if (tabName === 'Artwork' && artworkPage === 0) {
@@ -157,21 +152,26 @@ function openTab(evt, tabName) {
 }
 
 function setDefaultTab() {
-  var tabs = document.getElementsByClassName('tab');
-  for (var i = 0; i < tabs.length; i++) {
+  const tabs = document.getElementsByClassName('tab');
+  for (let i = 0; i < tabs.length; i++) {
     tabs[i].classList.remove('active');
   }
 
-  var tabContents = document.getElementsByClassName('tab-content');
-  for (var i = 0; i < tabContents.length; i++) {
-    tabContents[i].style.display = 'none';
-    tabContents[i].classList.remove('active');
+  const defaultTab = document.getElementById('tv-movies-tab');
+  if (defaultTab) {
+    defaultTab.classList.add('active');
   }
 
-  // Show the homepage content
-  var homepage = document.getElementById('homepage');
-  if (homepage) {
-    homepage.style.display = 'block';
+  const tabContents = document.getElementsByClassName('tab-content');
+  for (let i = 0; i < tabContents.length; i++) {
+    tabContents[i].classList.remove('active');
+    tabContents[i].style.display = 'none';
+  }
+
+  const tvMoviesContent = document.getElementById('TVMovies');
+  if (tvMoviesContent) {
+    tvMoviesContent.classList.add('active');
+    tvMoviesContent.style.display = 'block';
   }
 }
 
@@ -187,7 +187,7 @@ function loadMoreArtwork() {
 
   if (artworksToLoad.length === 0) {
     if (artworkPage === 0) {
-      container.innerHTML = '<p>No images available.</p>';
+      container.innerHTML = `<p>No images available.</p>`;
     }
     loadingArtwork = false;
     return;
@@ -195,7 +195,7 @@ function loadMoreArtwork() {
 
   artworksToLoad.forEach(imageId => {
     const postDiv = document.createElement('div');
-    postDiv.classList.add('artwork-post');  // Correct classList
+    postDiv.classList.add('artwork-post');
 
     const img = document.createElement('img');
     img.src = `https://drive.google.com/thumbnail?id=${imageId}&sz=w600-h600`;
@@ -213,10 +213,8 @@ function loadMoreArtwork() {
     downloadButton.onclick = () => downloadImage(imageId);
 
     postDiv.appendChild(img);
-    postDiv.classList.add('download-button'); // Incorrect, should be postDiv.appendChild(downloadButton);
-    postDiv; // This line is unnecessary and incorrect
-
-    container.appendChild(postDiv); // Should be container.appendChild(postDiv(postDiv is invalid)
+    postDiv.appendChild(downloadButton);
+    container.appendChild(postDiv);
   });
 
   artworkPage++;
